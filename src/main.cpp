@@ -21,6 +21,7 @@
 #endif
 */
 
+#include "Canvas/SDLCanvasRenderingContext2D.h"
 #include "DukJavaScriptEngine.h"
 #include "Input/SDLKeyToDOMKey.h"
 #include "JavaScriptEngine.h"
@@ -91,6 +92,8 @@ int main(int argc, char **argv) {
 	auto renderer = windowAndRenderer.second;
 	auto windowSurface = SDL_GetWindowSurface(windowAndRenderer.first);
 
+	ICanvasRenderingContext2D * canvas = new SDLCanvasRenderingContext2D(renderer, windowSurface);
+
 	SDL_RenderSetLogicalSize(renderer, 400, 240);
 
 	dcanvas::watch_file(g_options.filename.c_str(), [&]() {
@@ -108,8 +111,9 @@ int main(int argc, char **argv) {
 	g_jsEngine = std::make_unique<DukJavaScriptEngine>();
 	g_lastFileEval = std::chrono::high_resolution_clock::now();
 	g_jsEngine->eval_file(g_options.filename.u8string().c_str());
-	g_jsEngine->init_bitmap(renderer);
-	g_jsEngine->init_canvas(renderer, windowSurface);
+
+	g_jsEngine->init_bitmap(canvas);
+	g_jsEngine->init_canvas(canvas);
 
 
 	for(;;) {
@@ -141,8 +145,9 @@ int main(int argc, char **argv) {
 			// TODO: Exceptions and that stuff
 			g_jsEngine = std::make_unique<DukJavaScriptEngine>();
 			g_jsEngine->eval_file(g_options.filename.u8string().c_str());
-			g_jsEngine->init_bitmap(renderer);
-			g_jsEngine->init_canvas(renderer, windowSurface);
+
+			g_jsEngine->init_bitmap(canvas);
+			g_jsEngine->init_canvas(canvas);
 		}
 
 		g_jsEngine->call_global_function("tick");
@@ -151,8 +156,6 @@ int main(int argc, char **argv) {
 	}
 
 end:
-	SDL_DestroyRenderer(windowAndRenderer.second);
-	SDL_DestroyWindow(windowAndRenderer.first);
 
 	return 0;
 }

@@ -2,17 +2,19 @@
 
 #include "../../duktape.h"
 
-#include "CanvasState.h"
+#include "../../../Canvas/CanvasRenderingContext2D.h"
+
+#include "canvas_from_ctx.h"
 
 static int drawImage3args(duk_context * ctx) {
-	auto state = CanvasState::fromThis(ctx);
+	auto state = dcanvas::canvas_from_ctx(ctx);
 
 	duk_require_object(ctx, -3);
 	int dx = duk_require_number(ctx, -2);
 	int dy = duk_require_number(ctx, -1);
 
 	duk_get_prop_string(ctx, -3, "\xFF" "\xFF" "internalPtr");
-	SDL_Texture * texture = (SDL_Texture *)duk_get_pointer(ctx, -1);
+	auto texture = (Bitmap *)duk_get_pointer(ctx, -1);
 	duk_pop(ctx);
 
 	state->drawImage(texture, dx, dy);
@@ -21,7 +23,7 @@ static int drawImage3args(duk_context * ctx) {
 }
 
 static int drawImage5args(duk_context * ctx) {
-	auto state = CanvasState::fromThis(ctx);
+	auto state = dcanvas::canvas_from_ctx(ctx);
 
 	duk_require_object(ctx, -5);
 	int dx = duk_require_number(ctx, -4);
@@ -30,7 +32,7 @@ static int drawImage5args(duk_context * ctx) {
 	int dHeight = duk_require_number(ctx, -1);
 
 	duk_get_prop_string(ctx, -5, "\xFF" "\xFF" "internalPtr");
-	SDL_Texture * texture = (SDL_Texture *)duk_get_pointer(ctx, -1);
+	auto texture = (Bitmap *)duk_get_pointer(ctx, -1);
 	duk_pop(ctx);
 
 	state->drawImage(texture, dx, dy, dWidth, dHeight);
@@ -39,7 +41,7 @@ static int drawImage5args(duk_context * ctx) {
 }
 
 static int drawImage9args(duk_context * ctx) {
-	auto state = CanvasState::fromThis(ctx);
+	auto state = dcanvas::canvas_from_ctx(ctx);
 
 	duk_require_object(ctx, -9);
 	int sx = duk_require_number(ctx, -8);
@@ -52,7 +54,7 @@ static int drawImage9args(duk_context * ctx) {
 	int dHeight = duk_require_number(ctx, -1);
 
 	duk_get_prop_string(ctx, -9, "\xFF" "\xFF" "internalPtr");
-	SDL_Texture * texture = (SDL_Texture *)duk_get_pointer(ctx, -1);
+	auto texture = (Bitmap *)duk_get_pointer(ctx, -1);
 	duk_pop(ctx);
 
 	state->drawImage(texture, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);

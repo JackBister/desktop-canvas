@@ -5,6 +5,7 @@
 #include <variant>
 
 #include "JSValue.h"
+#include "Canvas/CanvasRenderingContext2D.h"
 
 struct SDL_Renderer;
 struct SDL_Surface;
@@ -16,8 +17,8 @@ public:
 	virtual void eval_file(std::string const& filename) = 0;
 	virtual void eval_string(std::string const& str) = 0;
 	// TODO: This is badly abstracted
-	virtual void init_bitmap(SDL_Renderer *) = 0;
-	virtual void init_canvas(SDL_Renderer *, SDL_Surface *) = 0;
+	virtual void init_bitmap(ICanvasRenderingContext2D *) = 0;
+	virtual void init_canvas(ICanvasRenderingContext2D *) = 0;
 
-	virtual ~IJavaScriptEngine() = 0;
+	virtual ~IJavaScriptEngine();
 };

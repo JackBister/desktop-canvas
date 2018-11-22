@@ -2,17 +2,10 @@
 
 #include <string>
 
-// Workaround for NDK retardation
-#ifdef __ANDROID__
-#include "SDL.h"
-#else
-#include <SDL2/SDL.h>
-#endif
-
 #include "../../duktape.h"
 #include "../../../Logger/Logger.h"
 
-#include "CanvasState.h"
+#include "canvas_from_ctx.h"
 #include "drawImage.h"
 
 static void defineProp(duk_context * ctx, std::string const& name, int(*getter)(duk_context *), int(*setter)(duk_context *)) {
@@ -28,38 +21,28 @@ static void defineMethod(duk_context * ctx, std::string const& name, int(*method
 	duk_def_prop(ctx, -3, DUK_DEFPROP_HAVE_VALUE);
 }
 
-
 static int fillRect(duk_context * ctx) {
-	auto state = CanvasState::fromThis(ctx);
+	auto state = dcanvas::canvas_from_ctx(ctx);
 
 	auto x = duk_require_int(ctx, -4);
 	auto y = duk_require_int(ctx, -3);
 	auto width = duk_require_int(ctx, -2);
 	auto height = duk_require_int(ctx, -1);
 
-	SDL_Rect rect;
-	rect.x = x;
-	rect.y = y;
-	rect.w = width;
-	rect.h = height;
-
-	auto color = state->getFillColor();
-
-	SDL_SetRenderDrawColor(state->getRenderer(), color.r, color.g, color.b, 0xFF);
-	SDL_RenderFillRect(state->getRenderer(), &rect);
+	state->fillRect(x, y, width, height);
 
 	return 0;
 }
 
 static int getFillStyle(duk_context * ctx) {
-	auto state = CanvasState::fromThis(ctx);
+	auto state = dcanvas::canvas_from_ctx(ctx);
 
 	duk_push_string(ctx, state->getFillStyle().c_str());
 	return 1;
 }
 
 static int setFillStyle(duk_context * ctx) {
-	auto state = CanvasState::fromThis(ctx);
+	auto state = dcanvas::canvas_from_ctx(ctx);
 
 	state->setFillStyle(std::string(duk_require_string(ctx, -1)));
 	return 1;
@@ -67,7 +50,7 @@ static int setFillStyle(duk_context * ctx) {
 
 static int finalizeCanvas(duk_context * ctx) {
 	duk_get_prop_string(ctx, -1, "\xFF" "\xFF" "internalPtr");
-	CanvasState * state = (CanvasState *)duk_get_pointer(ctx, -1);
+	auto state = (ICanvasRenderingContext2D *)duk_get_pointer(ctx, -1);
 
 	delete state;
 
@@ -78,12 +61,8 @@ static int finalizeCanvas(duk_context * ctx) {
 namespace dcanvas {
 	auto logger = ILogger::get();
 
-	void init_canvas(duk_context * ctx, SDL_Renderer * renderer, SDL_Surface * surface) {
-		auto state = new CanvasState(renderer, surface);
+	void init_canvas(duk_context * ctx, ICanvasRenderingContext2D * canvas) {
 
-		SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-		SDL_RenderClear(renderer);
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xFF);
 
 		duk_get_global_string(ctx, "init");
 
@@ -91,7 +70,7 @@ namespace dcanvas {
 		// Apparently you can not define properties on a pointer as you could with a light userdata in Lua?
 		duk_push_object(ctx);
 		duk_push_string(ctx, "\xFF" "\xFF" "internalPtr");
-		duk_push_pointer(ctx, state);
+		duk_push_pointer(ctx, canvas);
 		duk_def_prop(ctx, -3, DUK_DEFPROP_HAVE_VALUE);
 
 		defineProp(ctx, "fillStyle", getFillStyle, setFillStyle);

@@ -14,6 +14,7 @@
 #include "JavaScriptEngine.h"
 #include "slurp_file.h"
 #include "watch_file.h"
+#include "Canvas/SDLCanvasRenderingContext2D.h"
 
 std::unique_ptr<IJavaScriptEngine> g_jsEngine;
 
@@ -44,6 +45,8 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+	ICanvasRenderingContext2D * canvas = new SDLCanvasRenderingContext2D(renderer, surface);
+
 	auto backbuffer = SDL_CreateTexture(renderer, SDL_GetWindowPixelFormat(window), SDL_TEXTUREACCESS_TARGET, 320, 180);
 	SDL_SetRenderTarget(renderer, backbuffer);
 
@@ -53,8 +56,8 @@ int main(int argc, char *argv[]) {
 
 	g_jsEngine = std::make_unique<DukJavaScriptEngine>();
 	g_jsEngine->eval_file("app.js");
-	g_jsEngine->init_bitmap(renderer);
-	g_jsEngine->init_canvas(renderer, surface);
+	g_jsEngine->init_bitmap(canvas);
+	g_jsEngine->init_canvas(canvas);
 
 
 	for (;;) {

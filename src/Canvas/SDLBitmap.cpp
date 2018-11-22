@@ -1,0 +1,32 @@
+#include "SDLBitmap.h"
+
+// Workaround for NDK retardation
+#ifdef __ANDROID__
+#include "SDL.h"
+#else
+#include <SDL2/SDL.h>
+#endif
+
+SDLBitmap::SDLBitmap(SDL_Texture * texture, int height, int width) : texture(texture), height(height), width(width)
+{
+}
+
+int SDLBitmap::getHeight()
+{
+	return height;
+}
+
+int SDLBitmap::getWidth()
+{
+	return width;
+}
+
+void SDLBitmap::close()
+{
+	SDL_DestroyTexture(texture);
+}
+
+SDL_Texture * SDLBitmap::getTexture()
+{
+	return texture;
+}

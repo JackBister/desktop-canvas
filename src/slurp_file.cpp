@@ -20,3 +20,7 @@ std::string dcanvas::slurp_file(std::string const& filename)
 	free(buffer);
 	return ret;
 }
+
+void * dcanvas::slurp_file(std::string const& filename, size_t * length) {
+	return SDL_LoadFile(filename.c_str(), length);
+}

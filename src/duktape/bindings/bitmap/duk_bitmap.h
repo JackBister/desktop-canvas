@@ -2,8 +2,8 @@
 
 #include "../../duktape.h"
 
-struct SDL_Renderer;
+class ICanvasRenderingContext2D;
 
 namespace dcanvas {
-	void init_bitmap(duk_context * ctx, SDL_Renderer * renderer);
+	void init_bitmap(duk_context * ctx, ICanvasRenderingContext2D * canvas);
 }

@@ -2,24 +2,19 @@
 
 #include <string>
 
-// Workaround for NDK retardation
-#ifdef __ANDROID__
-#include "SDL.h"
-#else
-#include <SDL2/SDL.h>
-#endif
-
+#include "../../../Canvas/CanvasRenderingContext2D.h"
 #include "../../../Logger/Logger.h"
+#include "../../../slurp_file.h"
 
 static auto logger = ILogger::get();
 
-static SDL_Renderer * renderer = nullptr;
+static ICanvasRenderingContext2D * canvas = nullptr;
 
 static int finalizeBitmap(duk_context * ctx) {
 	duk_get_prop_string(ctx, -1, "\xFF" "\xFF" "internalPtr");
-	SDL_Texture * texture = (SDL_Texture *)duk_get_pointer(ctx, -1);
+	auto bitmap = (Bitmap *)duk_get_pointer(ctx, -1);
 
-	SDL_DestroyTexture(texture);
+	bitmap->close();
 
 	duk_pop(ctx);
 	return 0;
@@ -37,29 +32,22 @@ static int loadBitmap(duk_context * ctx) {
 	std::string filename(duk_require_string(ctx, -2));
 	duk_require_function(ctx, -1);
 
-	auto surface = SDL_LoadBMP(filename.c_str());
-	logger->info("bmp loaded");
-	if (!surface) {
-		logger->info("bmp surface NULL!");
-	}
+	size_t fileLength = 0;
+	auto file = dcanvas::slurp_file(filename.c_str(), &fileLength);
 
-	auto texture = SDL_CreateTextureFromSurface(renderer, surface);
-	if (!texture) {
-		logger->info("texture NULL! %s", SDL_GetError());
-	}
-	logger->info("texture not NULL! %s", "test");
+	auto bitmap = canvas->createBitmap(file, fileLength);
 
 	duk_push_object(ctx);
 
-	duk_push_pointer(ctx, texture);
+	duk_push_pointer(ctx, bitmap);
 	duk_put_prop_string(ctx, -2, "\xFF" "\xFF" "internalPtr");
 
 	duk_push_string(ctx, "height");
-	duk_push_number(ctx, surface->h);
+	duk_push_number(ctx, bitmap->getHeight());
 	duk_def_prop(ctx, -3, DUK_DEFPROP_HAVE_VALUE | DUK_DEFPROP_HAVE_WRITABLE | DUK_DEFPROP_HAVE_ENUMERABLE | DUK_DEFPROP_ENUMERABLE);
 
 	duk_push_string(ctx, "width");
-	duk_push_number(ctx, surface->w);
+	duk_push_number(ctx, bitmap->getWidth());
 	duk_def_prop(ctx, -3, DUK_DEFPROP_HAVE_VALUE | DUK_DEFPROP_HAVE_WRITABLE | DUK_DEFPROP_HAVE_ENUMERABLE | DUK_DEFPROP_ENUMERABLE);
 
 	duk_push_c_function(ctx, closeBitmap, 0);
@@ -77,9 +65,9 @@ static int loadBitmap(duk_context * ctx) {
 }
 
 namespace dcanvas {
-	void init_bitmap(duk_context * ctx, SDL_Renderer * rend)
+	void init_bitmap(duk_context * ctx, ICanvasRenderingContext2D * cvs)
 	{
-		renderer = rend;
+		canvas = cvs;
 
 		duk_push_global_object(ctx);
 		duk_push_c_function(ctx, loadBitmap, 2);
