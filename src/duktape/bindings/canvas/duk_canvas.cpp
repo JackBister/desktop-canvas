@@ -48,16 +48,6 @@ static int setFillStyle(duk_context * ctx) {
 	return 1;
 }
 
-static int finalizeCanvas(duk_context * ctx) {
-	duk_get_prop_string(ctx, -1, "\xFF" "\xFF" "internalPtr");
-	auto state = (ICanvasRenderingContext2D *)duk_get_pointer(ctx, -1);
-
-	delete state;
-
-	duk_pop(ctx);
-	return 0;
-}
-
 namespace dcanvas {
 	auto logger = ILogger::get();
 
@@ -77,9 +67,6 @@ namespace dcanvas {
 
 		defineMethod(ctx, "fillRect", fillRect, 4);
 		defineMethod(ctx, "drawImage", dcanvas::drawImage, DUK_VARARGS);
-
-		duk_push_c_function(ctx, finalizeCanvas, 1);
-		duk_set_finalizer(ctx, -2);
 
 		duk_pcall(ctx, 1);
 		logger->info("init call finished");
