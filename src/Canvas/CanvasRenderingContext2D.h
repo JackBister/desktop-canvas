@@ -15,6 +15,11 @@ public:
 
 	virtual void fillRect(int x, int y, int width, int height) = 0;
 
+	virtual void fillText(std::string const& text, int x, int y) = 0;
+
+	virtual std::string const& getFont() = 0;
+	virtual void setFont(std::string const& val) = 0;
+
 	virtual std::string const& getFillStyle() = 0;
 	virtual void setFillStyle(std::string const& val) = 0;
 

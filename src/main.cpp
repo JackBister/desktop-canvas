@@ -8,6 +8,7 @@
 #include "SDL.h"
 #else
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #endif
 
 /*
@@ -56,6 +57,9 @@ std::optional<std::pair<SDL_Window *, SDL_Renderer *>> initSdl() {
 	if (SDL_Init(SDL_INIT_EVERYTHING)) {
 		return {};
 	}
+	if (TTF_Init()) {
+		return {};
+	}
 
 	SDL_Window * window;
 	SDL_Renderer * renderer;
@@ -94,7 +98,7 @@ int main(int argc, char **argv) {
 
 	ICanvasRenderingContext2D * canvas = new SDLCanvasRenderingContext2D(renderer, windowSurface);
 
-	SDL_RenderSetLogicalSize(renderer, 400, 240);
+	SDL_RenderSetLogicalSize(renderer, 400, 225);
 
 	dcanvas::watch_file(g_options.filename.c_str(), [&]() {
 		auto now = std::chrono::high_resolution_clock::now();

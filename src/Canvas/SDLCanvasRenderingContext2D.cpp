@@ -5,7 +5,7 @@
 
 static auto logger = ILogger::get();
 
-SDLCanvasRenderingContext2D::SDLCanvasRenderingContext2D(SDL_Renderer * renderer, SDL_Surface * surface) : renderer(renderer), surface(surface) {
+SDLCanvasRenderingContext2D::SDLCanvasRenderingContext2D(SDL_Renderer * renderer, SDL_Surface * surface) : renderer(renderer), surface(surface), sdlFont(nullptr) {
 	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 	SDL_RenderClear(renderer);
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0xFF);
@@ -83,4 +83,61 @@ void SDLCanvasRenderingContext2D::fillRect(int x, int y, int width, int height)
 
 	SDL_SetRenderDrawColor(renderer, r, g, b, 0xFF);
 	SDL_RenderFillRect(renderer, &rect);
+}
+
+void SDLCanvasRenderingContext2D::fillText(std::string const& text, int x, int y)
+{
+	auto r = dcanvas::hex_to_byte(fillStyle.substr(1, 2));
+	auto g = dcanvas::hex_to_byte(fillStyle.substr(3, 2));
+	auto b = dcanvas::hex_to_byte(fillStyle.substr(5, 2));
+
+	SDL_Color fg;
+	fg.r = r;
+	fg.g = g;
+	fg.b = b;
+	fg.a = 0xFF;
+
+	auto surf = TTF_RenderUTF8_Solid(sdlFont.get(), text.c_str(), fg);
+	if (!surf) {
+		logger->info("Unable to render text: %s", SDL_GetError());
+	}
+	auto tex = SDL_CreateTextureFromSurface(renderer, surf);
+
+	SDL_Rect dst;
+	dst.x = x;
+	dst.y = y;
+	dst.h = surf->h;
+	dst.w = surf->w;
+
+	SDL_RenderCopy(renderer, tex, nullptr, &dst);
+
+	SDL_DestroyTexture(tex);
+	SDL_FreeSurface(surf);
+}
+
+std::string const& SDLCanvasRenderingContext2D::getFont()
+{
+	return font;
+}
+
+void SDLCanvasRenderingContext2D::setFont(std::string const& val)
+{
+	font = val;
+
+	auto sizeAndFont = parseFont(val);
+	sdlFont.reset(TTF_OpenFont(sizeAndFont.second.c_str(), sizeAndFont.first));
+}
+
+std::pair<int, std::string> SDLCanvasRenderingContext2D::parseFont(std::string const& fontString)
+{
+	auto pIndex = fontString.find('p');
+	auto sizeString = fontString.substr(0, pIndex);
+	auto size = std::stoi(sizeString);
+
+	auto spaceIndex = fontString.find(' ');
+	auto fontPath = fontString.substr(spaceIndex + 1);
+
+	return {
+		size, fontPath
+	};
 }

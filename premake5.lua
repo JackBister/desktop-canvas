@@ -66,13 +66,13 @@ solution "desktop-canvas"
 
 		filter "Debug"
 			libdirs { staticPlatformDirectory .. "debug/lib", platformdirectory .. "debug/lib" }
-			links { "SDL2d" }
+			links { "SDL2d", "SDL2_ttf" }
 			optimize "Off"
 			symbols "On"
 
 		filter "Release"
 			libdirs { staticPlatformDirectory .. "lib", platformdirectory .. "lib" }
-			links { "SDL2" }
+			links { "SDL2", "SDL2_ttf" }
 			optimize "Full"
 
 		

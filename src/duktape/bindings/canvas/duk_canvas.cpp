@@ -34,6 +34,18 @@ static int fillRect(duk_context * ctx) {
 	return 0;
 }
 
+static int fillText(duk_context * ctx) {
+	auto state = dcanvas::canvas_from_ctx(ctx);
+
+	auto text = duk_require_string(ctx, -3);
+	auto x = duk_require_int(ctx, -2);
+	auto y = duk_require_int(ctx, -1);
+
+	state->fillText(text, x, y);
+
+	return 0;
+}
+
 static int getFillStyle(duk_context * ctx) {
 	auto state = dcanvas::canvas_from_ctx(ctx);
 
@@ -45,6 +57,20 @@ static int setFillStyle(duk_context * ctx) {
 	auto state = dcanvas::canvas_from_ctx(ctx);
 
 	state->setFillStyle(std::string(duk_require_string(ctx, -1)));
+	return 1;
+}
+
+static int getFont(duk_context * ctx) {
+	auto state = dcanvas::canvas_from_ctx(ctx);
+
+	duk_push_string(ctx, state->getFillStyle().c_str());
+	return 1;
+}
+
+static int setFont(duk_context * ctx) {
+	auto state = dcanvas::canvas_from_ctx(ctx);
+
+	state->setFont(std::string(duk_require_string(ctx, -1)));
 	return 1;
 }
 
@@ -64,8 +90,10 @@ namespace dcanvas {
 		duk_def_prop(ctx, -3, DUK_DEFPROP_HAVE_VALUE);
 
 		defineProp(ctx, "fillStyle", getFillStyle, setFillStyle);
+		defineProp(ctx, "font", getFont, setFont);
 
 		defineMethod(ctx, "fillRect", fillRect, 4);
+		defineMethod(ctx, "fillText", fillText, 3);
 		defineMethod(ctx, "drawImage", dcanvas::drawImage, DUK_VARARGS);
 
 		duk_pcall(ctx, 1);
