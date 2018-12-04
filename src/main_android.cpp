@@ -57,6 +57,7 @@ int main(int argc, char *argv[]) {
 	g_jsEngine = std::make_unique<DukJavaScriptEngine>();
 	g_jsEngine->eval_file("app.js");
 	g_jsEngine->init_bitmap(canvas);
+	g_jsEngine->init_websocket();
 	g_jsEngine->init_canvas(canvas);
 
 

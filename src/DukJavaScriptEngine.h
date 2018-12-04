@@ -3,6 +3,8 @@
 #include "JavaScriptEngine.h"
 
 #include "duktape/duktape.h"
+#include "WebSocket/MessageEvent.h"
+#include "SafeQueue.h"
 
 struct SDL_Renderer;
 struct SDL_Surface;
@@ -18,8 +20,12 @@ public:
 	virtual void eval_string(std::string const & str) override;
 	virtual void init_bitmap(ICanvasRenderingContext2D *) override;
 	virtual void init_canvas(ICanvasRenderingContext2D *) override;
+	virtual void init_websocket() override;
+	virtual void pre_tick() override;
 
 private:
 	using DukDestroyer = void(*)(duk_context *);
 	std::unique_ptr<duk_context, DukDestroyer> ctx;
+
+	SafeQueue<std::pair<std::function<void(duk_context *, MessageEvent)>, MessageEvent>> webSocketMessageQueue;
 };

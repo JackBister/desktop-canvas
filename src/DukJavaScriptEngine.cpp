@@ -3,6 +3,7 @@
 #include "duktape/bindings/bitmap/duk_bitmap.h"
 #include "duktape/bindings/canvas/duk_canvas.h"
 #include "duktape/bindings/console/duk_console.h"
+#include "duktape/bindings/websocket/duk_websocket.h"
 
 #include "slurp_file.h"
 
@@ -69,4 +70,17 @@ void DukJavaScriptEngine::init_bitmap(ICanvasRenderingContext2D * canvas)
 void DukJavaScriptEngine::init_canvas(ICanvasRenderingContext2D * canvas)
 {
 	dcanvas::init_canvas(ctx.get(), canvas);
+}
+
+void DukJavaScriptEngine::init_websocket()
+{
+	dcanvas::init_websocket(ctx.get(), &webSocketMessageQueue);
+}
+
+void DukJavaScriptEngine::pre_tick()
+{
+	for (size_t i = 0; i < webSocketMessageQueue.size(); ++i) {
+		auto messageAndHandler = webSocketMessageQueue.pop();
+		messageAndHandler.first(ctx.get(), messageAndHandler.second);
+	}
 }

@@ -117,6 +117,7 @@ int main(int argc, char **argv) {
 	g_jsEngine->eval_file(g_options.filename.u8string().c_str());
 
 	g_jsEngine->init_bitmap(canvas);
+	g_jsEngine->init_websocket();
 	g_jsEngine->init_canvas(canvas);
 
 
@@ -151,9 +152,11 @@ int main(int argc, char **argv) {
 			g_jsEngine->eval_file(g_options.filename.u8string().c_str());
 
 			g_jsEngine->init_bitmap(canvas);
+			g_jsEngine->init_websocket();
 			g_jsEngine->init_canvas(canvas);
 		}
 
+		g_jsEngine->pre_tick();
 		g_jsEngine->call_global_function("tick");
 
 		SDL_RenderPresent(renderer);

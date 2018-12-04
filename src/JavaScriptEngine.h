@@ -19,6 +19,9 @@ public:
 	// TODO: This is badly abstracted
 	virtual void init_bitmap(ICanvasRenderingContext2D *) = 0;
 	virtual void init_canvas(ICanvasRenderingContext2D *) = 0;
+	virtual void init_websocket() = 0;
+
+	virtual void pre_tick() = 0;
 
 	virtual ~IJavaScriptEngine();
 };

@@ -66,13 +66,13 @@ solution "desktop-canvas"
 
 		filter "Debug"
 			libdirs { staticPlatformDirectory .. "debug/lib", platformdirectory .. "debug/lib" }
-			links { "SDL2d", "SDL2_ttf" }
+			links { "SDL2d", "SDL2_ttf", "uWS", "libuv", "ssleay32", "zlibd" }
 			optimize "Off"
 			symbols "On"
 
 		filter "Release"
 			libdirs { staticPlatformDirectory .. "lib", platformdirectory .. "lib" }
-			links { "SDL2", "SDL2_ttf" }
+			links { "SDL2", "SDL2_ttf", "uWS", "libuv", "ssleay32", "zlib" }
 			optimize "Full"
 
 		
