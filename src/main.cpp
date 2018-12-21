@@ -141,6 +141,14 @@ int main(int argc, char **argv) {
 					};
 					g_jsEngine->call_global_function("onkeydown", keyboardEvent);
 				}
+			} else if (e.type == SDL_MOUSEBUTTONDOWN) {
+				auto mouse = e.button;
+				JSObject mouseEvent = {
+					{ "button", (double)(mouse.button - 1) },
+					{ "clientX", (double)mouse.x },
+					{ "clientY", (double)mouse.y }
+				};
+				g_jsEngine->call_global_function("onmousedown", mouseEvent);
 			}
 		}
 
