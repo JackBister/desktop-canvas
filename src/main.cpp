@@ -127,7 +127,7 @@ int main(int argc, char **argv) {
 			if (e.type == SDL_QUIT) {
 				goto end;
 			}
-			if (e.type == SDL_KEYDOWN) {
+			if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP) {
 				auto key = e.key;
 				auto codeOptional = dcanvas::SDLKeyToDOMKey(key.keysym.sym);
 				if (codeOptional.has_value()) {
@@ -139,7 +139,11 @@ int main(int argc, char **argv) {
 						{ "repeat", key.repeat != 0 },
 						{ "shiftKey", (key.keysym.mod & KMOD_SHIFT) != 0 }
 					};
-					g_jsEngine->call_global_function("onkeydown", keyboardEvent);
+					if (e.type == SDL_KEYDOWN) {
+						g_jsEngine->call_global_function("onkeydown", keyboardEvent);
+					} else {
+						g_jsEngine->call_global_function("onkeyup", keyboardEvent);
+					}
 				}
 			} else if (e.type == SDL_MOUSEBUTTONDOWN) {
 				auto mouse = e.button;
