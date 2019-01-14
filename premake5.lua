@@ -30,8 +30,11 @@ solution "desktop-canvas"
 	configurations { "Debug", "Release" }
 	platforms { "ARM", "x86", "x64" }
 
-    filter {"system:windows", "action:vs*"}
-		systemversion(os.winSdkVersion() .. ".0")
+	filter {"system:windows", "action:vs*"}
+		local sysversion = os.winSdkVersion()
+		if sysversion ~= nil then
+			systemversion(sysversion .. ".0")
+		end
 
 	local platformdirectory = "installed/%{cfg.platform}-%{cfg.system}/"
 	local staticPlatformDirectory = "installed/%{cfg.platform}-%{cfg.system}-static/"

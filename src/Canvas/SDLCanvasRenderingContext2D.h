@@ -1,6 +1,8 @@
 #pragma once
 #include "CanvasRenderingContext2D.h"
 
+#include <memory>
+
 // Workaround for NDK retardation
 #ifdef __ANDROID__
 #include "SDL.h"

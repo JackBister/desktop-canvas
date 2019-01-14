@@ -2,6 +2,8 @@
 
 #include "JavaScriptEngine.h"
 
+#include <functional>
+
 #include "duktape/duktape.h"
 #include "WebSocket/MessageEvent.h"
 #include "SafeQueue.h"
