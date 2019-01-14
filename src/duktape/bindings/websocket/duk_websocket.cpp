@@ -49,7 +49,6 @@ static int setOnMessage(duk_context * ctx) {
 		webSocketMessageQueue->push(
 		std::make_pair(
 			[ws](duk_context * ctx, MessageEvent e) {
-				logger->info("handling, %d", duk_get_top(ctx));
 				duk_push_global_stash(ctx);
 				// TODO: Double yikes
 				duk_get_prop_index(ctx, -1, (duk_uarridx_t)ws);
