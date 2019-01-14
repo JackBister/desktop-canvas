@@ -1,0 +1,16 @@
+.externalNativeBuild
+.gradle
+.vs
+.vscode
+
+*.dll
+*.exe
+*.make
+*.sln
+*.vcxproj*
+
+android/app/jni/SDL
+build
+include
+installed
+Makefile
