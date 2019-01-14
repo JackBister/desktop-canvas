@@ -1,0 +1,26 @@
+version: '{build}'
+image: Visual Studio 2017
+configuration: Release
+platform: x64
+install:
+- ps: >-
+    if (-Not (Test-Path installed)) {
+        vcpkg install sdl2:x64-windows sdl2-ttf:x64-windows uwebsockets:x64-windows libuv:x64-windows zlib:x64-windows
+        Copy-Item 'c:\tools\vcpkg\installed' -Destination 'installed' -Recurse
+    }
+
+
+    if (-Not (Test-Path premake5.exe)) {
+        Start-FileDownload 'https://github.com/premake/premake-core/releases/download/v5.0.0-alpha12/premake-5.0.0-alpha12-windows.zip' -FileName 'premake5.zip'
+
+        7z x premake5.zip
+    }
+cache:
+- installed
+- premake5.exe
+before_build:
+- ps: .\premake5.exe vs2017
+build:
+  project: desktop-canvas.sln
+  parallel: true
+  verbosity: minimal
