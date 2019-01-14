@@ -2,6 +2,8 @@
 
 #include "WebSocket.h"
 
+#include <thread>
+
 #include <uWS/uWS.h>
 
 class UWebSocket : public WebSocket {

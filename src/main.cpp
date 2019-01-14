@@ -3,13 +3,11 @@
 #include <filesystem>
 #include <optional>
 
-// Workaround for NDK retardation
 #ifdef __ANDROID__
-#include "SDL.h"
-#else
+#include <SDL2/SDL_config_android.h>
+#endif
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-#endif
 
 /*
 #ifdef CANVAS_DUK_DEBUG

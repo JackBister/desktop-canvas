@@ -3,12 +3,8 @@
 
 #include <android/log.h>
 
-// Workaround for NDK retardation
-#ifdef __ANDROID__
-#include "SDL.h"
-#else
+#include <SDL2/SDL_config_android.h>
 #include <SDL2/SDL.h>
-#endif
 
 #include "DukJavaScriptEngine.h"
 #include "JavaScriptEngine.h"
@@ -50,7 +46,7 @@ int main(int argc, char *argv[]) {
 	auto backbuffer = SDL_CreateTexture(renderer, SDL_GetWindowPixelFormat(window), SDL_TEXTUREACCESS_TARGET, 320, 180);
 	SDL_SetRenderTarget(renderer, backbuffer);
 
-	if (SDL_RenderSetLogicalSize(renderer, 400, 240)) {
+	if (SDL_RenderSetLogicalSize(renderer, 400, 225)) {
 		__android_log_print(ANDROID_LOG_INFO, "dcanvas", "RenderSetLogicalSize failed, %s", SDL_GetError());
 	}
 
@@ -70,6 +66,7 @@ int main(int argc, char *argv[]) {
 		}
 
 		SDL_SetRenderTarget(renderer, backbuffer);
+		g_jsEngine->pre_tick();
 		g_jsEngine->call_global_function("tick");
 
 		SDL_SetRenderTarget(renderer, nullptr);

@@ -3,12 +3,10 @@
 #include <optional>
 #include <string>
 
-// Workaround for NDK retardation
 #ifdef __ANDROID__
-#include "SDL.h"
-#else
-#include <SDL2/SDL.h>
+#include <SDL2/SDL_config_android.h>
 #endif
+#include <SDL2/SDL.h>
 
 namespace dcanvas {
 	std::optional<std::string> SDLKeyToDOMKey(SDL_Keycode keycode);

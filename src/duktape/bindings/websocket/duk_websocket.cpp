@@ -1,6 +1,7 @@
 #include "duk_websocket.h"
 
 #include <string>
+#include <sstream>
 
 #include "../../../Logger/Logger.h"
 #include "../../../WebSocket/UWebSocket.h"
@@ -42,7 +43,9 @@ static int setOnMessage(duk_context * ctx) {
 	duk_push_global_stash(ctx);
 	duk_swap_top(ctx, -2);
 	// TODO: Yikes
-	duk_put_prop_index(ctx, -2, (duk_uarridx_t)ws);
+	std::stringstream ss;
+	ss << (void *) ws;
+	duk_put_prop_string(ctx, -2, ss.str().c_str());
 	duk_pop(ctx);
 
 	ws->setOnMessage([ws](MessageEvent msg) {
@@ -51,7 +54,9 @@ static int setOnMessage(duk_context * ctx) {
 			[ws](duk_context * ctx, MessageEvent e) {
 				duk_push_global_stash(ctx);
 				// TODO: Double yikes
-				duk_get_prop_index(ctx, -1, (duk_uarridx_t)ws);
+				std::stringstream ss;
+				ss << (void *)ws;
+				duk_get_prop_string(ctx, -1, ss.str().c_str());
 				duk_push_object(ctx);
 				duk_push_string(ctx, e.data.c_str());
 				duk_put_prop_string(ctx, -2, "data");

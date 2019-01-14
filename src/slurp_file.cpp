@@ -1,11 +1,6 @@
 #include "slurp_file.h"
 
-// Workaround for NDK retardation
-#ifdef __ANDROID__
-#include "SDL.h"
-#else
 #include <SDL2/SDL.h>
-#endif
 
 #include "Logger/Logger.h"
 
