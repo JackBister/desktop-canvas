@@ -1,26 +1,48 @@
 version: '{build}'
-image: Visual Studio 2017
+image:
+- Ubuntu1804
+- Visual Studio 2017
 configuration: Release
 platform: x64
 install:
 - ps: >-
-    if (-Not (Test-Path installed)) {
-        vcpkg install sdl2:x64-windows sdl2-ttf:x64-windows uwebsockets:x64-windows libuv:x64-windows zlib:x64-windows
-        Copy-Item 'c:\tools\vcpkg\installed' -Destination 'installed' -Recurse
-    }
+    if ($isWindows) {
+        if (-Not (Test-Path installed)) {
+            vcpkg install sdl2:x64-windows sdl2-ttf:x64-windows uwebsockets:x64-windows libuv:x64-windows zlib:x64-windows
+            Copy-Item 'c:\tools\vcpkg\installed' -Destination 'installed' -Recurse
+        }
 
+        if (-Not (Test-Path premake5.exe)) {
+            Start-FileDownload 'https://github.com/premake/premake-core/releases/download/v5.0.0-alpha12/premake-5.0.0-alpha12-windows.zip' -FileName 'premake5.zip'
 
-    if (-Not (Test-Path premake5.exe)) {
-        Start-FileDownload 'https://github.com/premake/premake-core/releases/download/v5.0.0-alpha12/premake-5.0.0-alpha12-windows.zip' -FileName 'premake5.zip'
+            7z x premake5.zip
+        }
+    } else {
+        if (-Not (Test-Path installed)) {
+            git clone https://github.com/Microsoft/vcpkg.git /home/appveyor/projects/vcpkg
+            cd /home/appveyor/projects/vcpkg
+            sh bootstrap-vcpkg.sh
+            ./vcpkg install sdl2:x64-linux sdl2-ttf:x64-linux uwebsockets:x64-linux libuv:x64-linux zlib:x64-linux
+            Copy-Item 'installed' -Destination "$env:APPVEYOR_BUILD_FOLDER/installed" -Recurse
+            cd $env:APPVEYOR_BUILD_FOLDER
+        }
 
-        7z x premake5.zip
+        if (-Not (Test-Path premake5)) {
+            Start-FileDownload 'https://github.com/premake/premake-core/releases/download/v5.0.0-alpha13/premake-5.0.0-alpha13-linux.tar.gz' -FileName 'premake5.tar.gz'
+
+            tar -xvf premake5.tar.gz
+        }
     }
 cache:
 - installed
 - premake5.exe
-before_build:
-- ps: .\premake5.exe vs2017
-build:
-  project: desktop-canvas.sln
-  parallel: true
-  verbosity: minimal
+- premake5
+build_script:
+- ps: >-
+    if ($isWindows) {
+        ./premake5.exe vs2017
+        msbuild "desktop-canvas.sln" /m /verbosity:minimal /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+    } else {
+        ./premake5 gmake
+        sh -c 'CXX=g++-8 make config=debug_x64'
+    }
