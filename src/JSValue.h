@@ -1,12 +1,12 @@
 #pragma once
 
 #include <memory>
-#include <unordered_map>
 #include <variant>
+#include <vector>
 
 class JSValue;
 
-using JSObject = std::unordered_map<std::string, JSValue>;
+using JSObject = std::vector<std::pair<std::string, JSValue>>;
 
 class JSValue : public std::variant<bool, double, std::string, JSObject> {
 public:

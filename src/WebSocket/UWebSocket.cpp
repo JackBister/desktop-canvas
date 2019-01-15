@@ -18,7 +18,7 @@ UWebSocket::UWebSocket(std::string const & url)
 
 	hub.connect(url);
 
-	thread = std::thread::thread([this]() {
+	thread = std::thread([this]() {
 		hub.run();
 	});
 }
