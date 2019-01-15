@@ -26,7 +26,7 @@ if isModuleAvailable("premake-compilationunit/compilationunit") then
 end
 
 solution "desktop-canvas"
-	
+
 	configurations { "Debug", "Release" }
 	platforms { "ARM", "x86", "x64" }
 
@@ -67,17 +67,29 @@ solution "desktop-canvas"
 			compilationunitenabled (true)
 		end
 
+		filter { "system:linux" }
+			linkoptions { "-pthread" }
+
 		filter "Debug"
 			libdirs { staticPlatformDirectory .. "debug/lib", platformdirectory .. "debug/lib" }
-			links { "SDL2d", "SDL2_ttf", "uWS", "libuv", "ssleay32", "zlibd" }
 			optimize "Off"
 			symbols "On"
 
 		filter "Release"
 			libdirs { staticPlatformDirectory .. "lib", platformdirectory .. "lib" }
-			links { "SDL2", "SDL2_ttf", "uWS", "libuv", "ssleay32", "zlib" }
 			optimize "Full"
 
-		
+		filter { "system:windows", "Debug" }
+			links { "SDL2d", "SDL2_ttf", "uWS", "libuv", "ssleay32", "zlibd" }
+
+		filter { "system:windows", "Release" }
+			links { "SDL2", "SDL2_ttf", "uWS", "libuv", "ssleay32", "zlib" }
+
+		filter { "system:linux", "Debug" }
+			links { "SDL2d", "SDL2_ttf", "uWS", "libuv", "ssl", "z", "crypto", "dl", "freetyped", "bz2d", "png", "stdc++fs" }
+
+		filter { "system:linux", "Release" }
+			links { "SDL2", "SDL2_ttf", "uWS", "libuv", "ssl", "z", "crypto", "dl", "freetype", "bz2", "png", "stdc++fs" }
+
 		filter { "files:src/**_android.*" }
 			flags {"ExcludeFromBuild"}

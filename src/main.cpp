@@ -98,7 +98,7 @@ int main(int argc, char **argv) {
 
 	SDL_RenderSetLogicalSize(renderer, 400, 225);
 
-	dcanvas::watch_file(g_options.filename.c_str(), [&]() {
+	dcanvas::watch_file(g_options.filename.wstring(), [&]() {
 		auto now = std::chrono::high_resolution_clock::now();
 		auto timeSinceLastEval = std::chrono::duration_cast<std::chrono::seconds>(now - g_lastFileEval);
 

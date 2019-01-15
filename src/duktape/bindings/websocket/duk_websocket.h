@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include "../../duktape.h"
 #include "../../../WebSocket/MessageEvent.h"
 #include "../../../SafeQueue.h"
