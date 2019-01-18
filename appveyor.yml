@@ -8,7 +8,7 @@ install:
 - ps: >-
     if ($isWindows) {
         if (-Not (Test-Path installed)) {
-            vcpkg install sdl2:x64-windows sdl2-ttf:x64-windows uwebsockets:x64-windows libuv:x64-windows zlib:x64-windows
+            vcpkg install sdl2:x64-windows sdl2-ttf:x64-windows asio:x64-windows websocketpp:x64-windows
             Copy-Item 'c:\tools\vcpkg\installed' -Destination 'installed' -Recurse
         }
 
@@ -22,7 +22,7 @@ install:
             git clone https://github.com/Microsoft/vcpkg.git /home/appveyor/projects/vcpkg
             cd /home/appveyor/projects/vcpkg
             sh bootstrap-vcpkg.sh
-            ./vcpkg install sdl2:x64-linux sdl2-ttf:x64-linux uwebsockets:x64-linux libuv:x64-linux zlib:x64-linux
+            ./vcpkg install sdl2:x64-linux sdl2-ttf:x64-linux asio:x64-linux websocketpp:x64-linux zlib:x64-linux
             Copy-Item 'installed' -Destination "$env:APPVEYOR_BUILD_FOLDER/installed" -Recurse
             cd $env:APPVEYOR_BUILD_FOLDER
         }
@@ -34,7 +34,7 @@ install:
         }
     }
 cache:
-- installed
+- installed -> appveyor.yml
 - premake5.exe
 - premake5
 build_script:

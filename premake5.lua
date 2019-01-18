@@ -44,8 +44,6 @@ solution "desktop-canvas"
 		language "C++"
 		cppdialect "C++17"
 
-		exceptionhandling "Off"
-
 		files { "src/**.h", "src/**.c", "src/**.cpp" }
 		buildlog "build/build.log"
 		debugargs { "--watch example/dist/app.js" }
@@ -80,16 +78,16 @@ solution "desktop-canvas"
 			optimize "Full"
 
 		filter { "system:windows", "Debug" }
-			links { "SDL2d", "SDL2_ttf", "uWS", "libuv", "ssleay32", "zlibd" }
+			links { "SDL2d", "SDL2_ttf" }
 
 		filter { "system:windows", "Release" }
-			links { "SDL2", "SDL2_ttf", "uWS", "libuv", "ssleay32", "zlib" }
+			links { "SDL2", "SDL2_ttf" }
 
 		filter { "system:linux", "Debug" }
-			links { "SDL2d", "SDL2_ttf", "uWS", "libuv", "ssl", "z", "crypto", "dl", "freetyped", "bz2d", "png", "stdc++fs" }
+			links { "SDL2d", "SDL2_ttf", "crypto", "dl", "freetyped", "bz2d", "png", "stdc++fs", "z" }
 
 		filter { "system:linux", "Release" }
-			links { "SDL2", "SDL2_ttf", "uWS", "libuv", "ssl", "z", "crypto", "dl", "freetype", "bz2", "png", "stdc++fs" }
+			links { "SDL2", "SDL2_ttf", "crypto", "dl", "freetype", "bz2", "png", "stdc++fs", "z" }
 
 		filter { "files:src/**_android.*" }
 			flags {"ExcludeFromBuild"}

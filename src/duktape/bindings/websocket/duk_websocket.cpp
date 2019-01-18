@@ -4,7 +4,7 @@
 #include <sstream>
 
 #include "../../../Logger/Logger.h"
-#include "../../../WebSocket/UWebSocket.h"
+#include "../../../WebSocket/WebSocketpp.h"
 
 static auto logger = ILogger::get();
 static SafeQueue<std::pair<std::function<void(duk_context *, MessageEvent)>, MessageEvent>> * webSocketMessageQueue = nullptr;
@@ -17,6 +17,7 @@ static int close(duk_context * ctx) {
 	duk_pop_2(ctx);
 
 	ws->close();
+
 	return 0;
 }
 
@@ -89,7 +90,7 @@ static int websocketConstructor(duk_context * ctx) {
 
 	std::string url(duk_require_string(ctx, -1));
 
-	auto ret = new UWebSocket(url);
+	auto ret = new WebSocketpp(url);
 
 	duk_push_object(ctx);
 
