@@ -1,16 +1,22 @@
+.classpath
 .externalNativeBuild
 .gradle
+.project
+.settings
 .vs
 .vscode
 
 *.dll
 *.exe
+*.jar
 *.make
 *.sln
 *.vcxproj*
 
 android/app/jni/SDL
+android/app/src/main/assets
 build
+example
 include
 installed
 Makefile
