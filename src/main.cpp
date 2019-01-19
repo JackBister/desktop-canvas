@@ -25,6 +25,7 @@
 #include "DukJavaScriptEngine.h"
 #include "Input/SDLKeyToDOMKey.h"
 #include "JavaScriptEngine.h"
+#include "SDLEventPump.h"
 #include "slurpFile.h"
 #include "watchFile.h"
 
@@ -33,6 +34,7 @@ constexpr int MIN_DURATION_BETWEEN_FILE_EVALS_SECONDS = 5;
 std::chrono::high_resolution_clock::time_point g_lastFileEval;
 std::atomic_bool g_shouldEvalFile = false;
 
+std::unique_ptr<EventPump> g_eventPump = std::make_unique<SDLEventPump>();
 std::unique_ptr<IJavaScriptEngine> g_jsEngine;
 
 struct {
@@ -122,39 +124,7 @@ int main(int argc, char **argv) {
 
 
 	for(;;) {
-		SDL_Event e;
-		while (SDL_PollEvent(&e)) {
-			if (e.type == SDL_QUIT) {
-				goto end;
-			}
-			if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP) {
-				auto key = e.key;
-				auto codeOptional = dcanvas::SDLKeyToDOMKey(key.keysym.sym);
-				if (codeOptional.has_value()) {
-					JSObject keyboardEvent = {
-						{ "altKey", (key.keysym.mod & KMOD_ALT) != 0 },
-						{ "code", codeOptional.value() },
-						{ "ctrlKey", (key.keysym.mod & KMOD_CTRL) != 0 },
-						{ "metaKey", (key.keysym.mod & KMOD_GUI) != 0 },
-						{ "repeat", key.repeat != 0 },
-						{ "shiftKey", (key.keysym.mod & KMOD_SHIFT) != 0 }
-					};
-					if (e.type == SDL_KEYDOWN) {
-						g_jsEngine->callGlobalFunction("onkeydown", keyboardEvent);
-					} else {
-						g_jsEngine->callGlobalFunction("onkeyup", keyboardEvent);
-					}
-				}
-			} else if (e.type == SDL_MOUSEBUTTONDOWN) {
-				auto mouse = e.button;
-				JSObject mouseEvent = {
-					{ "button", (double)(mouse.button - 1) },
-					{ "clientX", (double)mouse.x },
-					{ "clientY", (double)mouse.y }
-				};
-				g_jsEngine->callGlobalFunction("onmousedown", mouseEvent);
-			}
-		}
+		g_eventPump->pumpEvents(g_jsEngine.get());
 
 		if (g_shouldEvalFile) {
 			g_lastFileEval = std::chrono::high_resolution_clock::now();
