@@ -52,6 +52,9 @@ solution "desktop-canvas"
 		objdir "build"
 		targetdir "build"
 
+		-- Appveyor VS does not like to compile websocketpp without this flag(?)
+		defines { "_HAS_AUTO_PTR_ETC" }
+
 		sysincludedirs { "include",  staticPlatformDirectory .. "include", platformdirectory .. "include" }
 
 		local androidHome = os.getenv("ANDROID_HOME")
