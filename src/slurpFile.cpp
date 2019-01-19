@@ -1,4 +1,4 @@
-#include "slurp_file.h"
+#include "slurpFile.h"
 
 #include <SDL2/SDL.h>
 
@@ -6,7 +6,7 @@
 
 static auto logger = ILogger::get();
 
-std::string dcanvas::slurp_file(std::string const& filename)
+std::string dcanvas::slurpFile(std::string const& filename)
 {
 	size_t length = 0;
 	char * buffer = (char *) SDL_LoadFile(filename.c_str(), &length);
@@ -16,6 +16,6 @@ std::string dcanvas::slurp_file(std::string const& filename)
 	return ret;
 }
 
-void * dcanvas::slurp_file(std::string const& filename, size_t * length) {
+void * dcanvas::slurpFile(std::string const& filename, size_t * length) {
 	return SDL_LoadFile(filename.c_str(), length);
 }

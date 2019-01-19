@@ -1,13 +1,13 @@
 #include "DukJavaScriptEngine.h"
 
-#include "duktape/bindings/bitmap/duk_bitmap.h"
-#include "duktape/bindings/canvas/duk_canvas.h"
-#include "duktape/bindings/console/duk_console.h"
-#include "duktape/bindings/websocket/duk_websocket.h"
+#include "duktape/bindings/bitmap/dukBitmap.h"
+#include "duktape/bindings/canvas/dukCanvas.h"
+#include "duktape/bindings/console/dukConsole.h"
+#include "duktape/bindings/websocket/dukWebsocket.h"
 
-#include "slurp_file.h"
+#include "slurpFile.h"
 
-static void push_js_value(duk_context * ctx, JSValue value) {
+static void pushJsValue(duk_context * ctx, JSValue value) {
 	auto paramType = value.index();
 	if (paramType == JSValue::Type::BOOL) {
 		duk_push_boolean(ctx, std::get<bool>(value));
@@ -17,7 +17,7 @@ static void push_js_value(duk_context * ctx, JSValue value) {
 		auto object = std::get<JSObject>(value);
 		duk_push_bare_object(ctx);
 		for (auto it = object.begin(); it != object.end(); ++it) {
-			push_js_value(ctx, it->second);
+			pushJsValue(ctx, it->second);
 			duk_put_prop_string(ctx, -2, it->first.c_str());
 		}
 	} else if (paramType == JSValue::Type::STRING) {
@@ -34,50 +34,50 @@ DukJavaScriptEngine::~DukJavaScriptEngine()
 {
 }
 
-void DukJavaScriptEngine::call_global_function(std::string const& function_name)
+void DukJavaScriptEngine::callGlobalFunction(std::string const& function_name)
 {
 	duk_get_global_string(ctx.get(), function_name.c_str());
 	duk_pcall(ctx.get(), 0);
 	duk_pop(ctx.get());
 }
 
-void DukJavaScriptEngine::call_global_function(std::string const& function_name, JSValue parameters)
+void DukJavaScriptEngine::callGlobalFunction(std::string const& function_name, JSValue parameters)
 {
 	duk_get_global_string(ctx.get(), function_name.c_str());
 
-	push_js_value(ctx.get(), parameters);
+	pushJsValue(ctx.get(), parameters);
 
 	duk_pcall(ctx.get(), 1);
 	duk_pop(ctx.get());
 }
 
-void DukJavaScriptEngine::eval_file(std::string const& filename)
+void DukJavaScriptEngine::evalFile(std::string const& filename)
 {
-	auto fileContents = dcanvas::slurp_file(filename);
+	auto fileContents = dcanvas::slurpFile(filename);
 	duk_eval_string(ctx.get(), fileContents.c_str());
 }
 
-void DukJavaScriptEngine::eval_string(std::string const& str)
+void DukJavaScriptEngine::evalString(std::string const& str)
 {
 	duk_eval_string(ctx.get(), str.c_str());
 }
 
-void DukJavaScriptEngine::init_bitmap(ICanvasRenderingContext2D * canvas)
+void DukJavaScriptEngine::initBitmap(ICanvasRenderingContext2D * canvas)
 {
-	dcanvas::init_bitmap(ctx.get(), canvas);
+	dcanvas::initBitmap(ctx.get(), canvas);
 }
 
-void DukJavaScriptEngine::init_canvas(ICanvasRenderingContext2D * canvas)
+void DukJavaScriptEngine::initCanvas(ICanvasRenderingContext2D * canvas)
 {
-	dcanvas::init_canvas(ctx.get(), canvas);
+	dcanvas::initCanvas(ctx.get(), canvas);
 }
 
-void DukJavaScriptEngine::init_websocket()
+void DukJavaScriptEngine::initWebsocket()
 {
-	dcanvas::init_websocket(ctx.get(), &webSocketMessageQueue);
+	dcanvas::initWebsocket(ctx.get(), &webSocketMessageQueue);
 }
 
-void DukJavaScriptEngine::pre_tick()
+void DukJavaScriptEngine::preTick()
 {
 	for (size_t i = 0; i < webSocketMessageQueue.size(); ++i) {
 		auto messageAndHandler = webSocketMessageQueue.pop();

@@ -5,5 +5,5 @@
 class ICanvasRenderingContext2D;
 
 namespace dcanvas {
-	void init_bitmap(duk_context * ctx, ICanvasRenderingContext2D * canvas);
+	void initBitmap(duk_context * ctx, ICanvasRenderingContext2D * canvas);
 }

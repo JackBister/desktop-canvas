@@ -1,6 +1,6 @@
-#include "canvas_from_ctx.h"
+#include "canvasFromCtx.h"
 
-ICanvasRenderingContext2D * dcanvas::canvas_from_ctx(duk_context * ctx)
+ICanvasRenderingContext2D * dcanvas::canvasFromCtx(duk_context * ctx)
 {
 	duk_push_this(ctx);
 	duk_require_object(ctx, -1);

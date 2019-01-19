@@ -16,14 +16,14 @@ public:
 	DukJavaScriptEngine();
 	~DukJavaScriptEngine() override;
 
-	virtual void call_global_function(std::string const & function_name) override;
-	virtual void call_global_function(std::string const& function_name, JSValue parameters) override;
-	virtual void eval_file(std::string const & filename) override;
-	virtual void eval_string(std::string const & str) override;
-	virtual void init_bitmap(ICanvasRenderingContext2D *) override;
-	virtual void init_canvas(ICanvasRenderingContext2D *) override;
-	virtual void init_websocket() override;
-	virtual void pre_tick() override;
+	virtual void callGlobalFunction(std::string const & function_name) override;
+	virtual void callGlobalFunction(std::string const& function_name, JSValue parameters) override;
+	virtual void evalFile(std::string const & filename) override;
+	virtual void evalString(std::string const & str) override;
+	virtual void initBitmap(ICanvasRenderingContext2D *) override;
+	virtual void initCanvas(ICanvasRenderingContext2D *) override;
+	virtual void initWebsocket() override;
+	virtual void preTick() override;
 
 private:
 	using DukDestroyer = void(*)(duk_context *);

@@ -2,6 +2,7 @@
 #include <chrono>
 #include <filesystem>
 #include <optional>
+#include <thread>
 
 #ifdef __ANDROID__
 #include <SDL2/SDL_config_android.h>
@@ -24,8 +25,8 @@
 #include "DukJavaScriptEngine.h"
 #include "Input/SDLKeyToDOMKey.h"
 #include "JavaScriptEngine.h"
-#include "slurp_file.h"
-#include "watch_file.h"
+#include "slurpFile.h"
+#include "watchFile.h"
 
 constexpr int MIN_DURATION_BETWEEN_FILE_EVALS_SECONDS = 5;
 
@@ -77,6 +78,7 @@ std::wstring toWString(char const * const str) {
 
 #undef main
 int main(int argc, char **argv) {
+	using namespace std::chrono_literals;
 	parseArgs(argc, argv);
 
 	auto workingDir = std::filesystem::absolute(g_options.filename);
@@ -98,7 +100,7 @@ int main(int argc, char **argv) {
 
 	SDL_RenderSetLogicalSize(renderer, 400, 225);
 
-	dcanvas::watch_file(g_options.filename.wstring(), [&]() {
+	dcanvas::watchFile(g_options.filename.wstring(), [&]() {
 		auto now = std::chrono::high_resolution_clock::now();
 		auto timeSinceLastEval = std::chrono::duration_cast<std::chrono::seconds>(now - g_lastFileEval);
 
@@ -112,11 +114,11 @@ int main(int argc, char **argv) {
 
 	g_jsEngine = std::make_unique<DukJavaScriptEngine>();
 	g_lastFileEval = std::chrono::high_resolution_clock::now();
-	g_jsEngine->eval_file(g_options.filename.u8string().c_str());
+	g_jsEngine->evalFile(g_options.filename.u8string().c_str());
 
-	g_jsEngine->init_bitmap(canvas);
-	g_jsEngine->init_websocket();
-	g_jsEngine->init_canvas(canvas);
+	g_jsEngine->initBitmap(canvas);
+	g_jsEngine->initWebsocket();
+	g_jsEngine->initCanvas(canvas);
 
 
 	for(;;) {
@@ -138,9 +140,9 @@ int main(int argc, char **argv) {
 						{ "shiftKey", (key.keysym.mod & KMOD_SHIFT) != 0 }
 					};
 					if (e.type == SDL_KEYDOWN) {
-						g_jsEngine->call_global_function("onkeydown", keyboardEvent);
+						g_jsEngine->callGlobalFunction("onkeydown", keyboardEvent);
 					} else {
-						g_jsEngine->call_global_function("onkeyup", keyboardEvent);
+						g_jsEngine->callGlobalFunction("onkeyup", keyboardEvent);
 					}
 				}
 			} else if (e.type == SDL_MOUSEBUTTONDOWN) {
@@ -150,7 +152,7 @@ int main(int argc, char **argv) {
 					{ "clientX", (double)mouse.x },
 					{ "clientY", (double)mouse.y }
 				};
-				g_jsEngine->call_global_function("onmousedown", mouseEvent);
+				g_jsEngine->callGlobalFunction("onmousedown", mouseEvent);
 			}
 		}
 
@@ -159,17 +161,20 @@ int main(int argc, char **argv) {
 			g_shouldEvalFile = false;
 			// TODO: Exceptions and that stuff
 			g_jsEngine = std::make_unique<DukJavaScriptEngine>();
-			g_jsEngine->eval_file(g_options.filename.u8string().c_str());
+			g_jsEngine->evalFile(g_options.filename.u8string().c_str());
 
-			g_jsEngine->init_bitmap(canvas);
-			g_jsEngine->init_websocket();
-			g_jsEngine->init_canvas(canvas);
+			g_jsEngine->initBitmap(canvas);
+			g_jsEngine->initWebsocket();
+			g_jsEngine->initCanvas(canvas);
 		}
 
-		g_jsEngine->pre_tick();
-		g_jsEngine->call_global_function("tick");
+		g_jsEngine->preTick();
+		g_jsEngine->callGlobalFunction("tick");
 
 		SDL_RenderPresent(renderer);
+
+		// TODO: I use this to prevent my laptop from going 100% full blast with its fans, but it should probably be done in a cleaner way
+		std::this_thread::sleep_for(13ms);
 	}
 
 end:

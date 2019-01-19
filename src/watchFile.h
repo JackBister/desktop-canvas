@@ -4,5 +4,5 @@
 #include <string>
 
 namespace dcanvas {
-	void watch_file(std::wstring filename, std::function<void()> onChange);
+	void watchFile(std::wstring filename, std::function<void()> onChange);
 };

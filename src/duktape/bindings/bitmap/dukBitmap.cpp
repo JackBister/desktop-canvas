@@ -1,10 +1,10 @@
-#include "duk_bitmap.h"
+#include "dukBitmap.h"
 
 #include <string>
 
 #include "../../../Canvas/CanvasRenderingContext2D.h"
 #include "../../../Logger/Logger.h"
-#include "../../../slurp_file.h"
+#include "../../../slurpFile.h"
 
 static auto logger = ILogger::get();
 
@@ -33,7 +33,7 @@ static int loadBitmap(duk_context * ctx) {
 	duk_require_function(ctx, -1);
 
 	size_t fileLength = 0;
-	auto file = dcanvas::slurp_file(filename.c_str(), &fileLength);
+	auto file = dcanvas::slurpFile(filename.c_str(), &fileLength);
 
 	auto bitmap = canvas->createBitmap(file, fileLength);
 
@@ -65,7 +65,7 @@ static int loadBitmap(duk_context * ctx) {
 }
 
 namespace dcanvas {
-	void init_bitmap(duk_context * ctx, ICanvasRenderingContext2D * cvs)
+	void initBitmap(duk_context * ctx, ICanvasRenderingContext2D * cvs)
 	{
 		canvas = cvs;
 

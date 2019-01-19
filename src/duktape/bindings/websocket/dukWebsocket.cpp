@@ -1,4 +1,4 @@
-#include "duk_websocket.h"
+#include "dukWebsocket.h"
 
 #include <string>
 #include <sstream>
@@ -116,7 +116,7 @@ static int websocketConstructor(duk_context * ctx) {
 	return 1;
 }
 
-void dcanvas::init_websocket(duk_context * ctx, SafeQueue<std::pair<std::function<void(duk_context *, MessageEvent)>, MessageEvent>> * messageQueue)
+void dcanvas::initWebsocket(duk_context * ctx, SafeQueue<std::pair<std::function<void(duk_context *, MessageEvent)>, MessageEvent>> * messageQueue)
 {
 	webSocketMessageQueue = messageQueue;
 

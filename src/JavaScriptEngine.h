@@ -12,16 +12,16 @@ struct SDL_Surface;
 
 class IJavaScriptEngine {
 public:
-	virtual void call_global_function(std::string const& function_name) = 0;
-	virtual void call_global_function(std::string const& function_name, JSValue parameters) = 0;
-	virtual void eval_file(std::string const& filename) = 0;
-	virtual void eval_string(std::string const& str) = 0;
+	virtual void callGlobalFunction(std::string const& functionName) = 0;
+	virtual void callGlobalFunction(std::string const& functionName, JSValue parameters) = 0;
+	virtual void evalFile(std::string const& filename) = 0;
+	virtual void evalString(std::string const& str) = 0;
 	// TODO: This is badly abstracted
-	virtual void init_bitmap(ICanvasRenderingContext2D *) = 0;
-	virtual void init_canvas(ICanvasRenderingContext2D *) = 0;
-	virtual void init_websocket() = 0;
+	virtual void initBitmap(ICanvasRenderingContext2D *) = 0;
+	virtual void initCanvas(ICanvasRenderingContext2D *) = 0;
+	virtual void initWebsocket() = 0;
 
-	virtual void pre_tick() = 0;
+	virtual void preTick() = 0;
 
 	virtual ~IJavaScriptEngine();
 };

@@ -8,8 +8,6 @@
 
 #include "DukJavaScriptEngine.h"
 #include "JavaScriptEngine.h"
-#include "slurp_file.h"
-#include "watch_file.h"
 #include "Canvas/SDLCanvasRenderingContext2D.h"
 
 std::unique_ptr<IJavaScriptEngine> g_jsEngine;
@@ -51,10 +49,10 @@ int main(int argc, char *argv[]) {
 	}
 
 	g_jsEngine = std::make_unique<DukJavaScriptEngine>();
-	g_jsEngine->eval_file("app.js");
-	g_jsEngine->init_bitmap(canvas);
-	g_jsEngine->init_websocket();
-	g_jsEngine->init_canvas(canvas);
+	g_jsEngine->evalFile("app.js");
+	g_jsEngine->initBitmap(canvas);
+	g_jsEngine->initWebsocket();
+	g_jsEngine->initCanvas(canvas);
 
 
 	for (;;) {
@@ -66,8 +64,8 @@ int main(int argc, char *argv[]) {
 		}
 
 		SDL_SetRenderTarget(renderer, backbuffer);
-		g_jsEngine->pre_tick();
-		g_jsEngine->call_global_function("tick");
+		g_jsEngine->preTick();
+		g_jsEngine->callGlobalFunction("tick");
 
 		SDL_SetRenderTarget(renderer, nullptr);
 		SDL_RenderCopy(renderer, backbuffer, nullptr, nullptr);

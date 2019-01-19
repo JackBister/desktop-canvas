@@ -1,7 +1,7 @@
 #include "SDLCanvasRenderingContext2D.h"
 
 #include "../Logger/Logger.h"
-#include "../hex_to_byte.h"
+#include "../hexToByte.h"
 
 static auto logger = ILogger::get();
 
@@ -71,9 +71,9 @@ void SDLCanvasRenderingContext2D::drawImage(Bitmap * img, int sx, int sy, int sW
 
 void SDLCanvasRenderingContext2D::fillRect(int x, int y, int width, int height)
 {
-	auto r = dcanvas::hex_to_byte(fillStyle.substr(1, 2));
-	auto g = dcanvas::hex_to_byte(fillStyle.substr(3, 2));
-	auto b = dcanvas::hex_to_byte(fillStyle.substr(5, 2));
+	auto r = dcanvas::hexToByte(fillStyle.substr(1, 2));
+	auto g = dcanvas::hexToByte(fillStyle.substr(3, 2));
+	auto b = dcanvas::hexToByte(fillStyle.substr(5, 2));
 
 	SDL_Rect rect;
 	rect.x = x;
@@ -87,9 +87,9 @@ void SDLCanvasRenderingContext2D::fillRect(int x, int y, int width, int height)
 
 void SDLCanvasRenderingContext2D::fillText(std::string const& text, int x, int y)
 {
-	auto r = dcanvas::hex_to_byte(fillStyle.substr(1, 2));
-	auto g = dcanvas::hex_to_byte(fillStyle.substr(3, 2));
-	auto b = dcanvas::hex_to_byte(fillStyle.substr(5, 2));
+	auto r = dcanvas::hexToByte(fillStyle.substr(1, 2));
+	auto g = dcanvas::hexToByte(fillStyle.substr(3, 2));
+	auto b = dcanvas::hexToByte(fillStyle.substr(5, 2));
 
 	SDL_Color fg;
 	fg.r = r;

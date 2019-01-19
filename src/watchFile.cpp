@@ -1,4 +1,4 @@
-#include "watch_file.h"
+#include "watchFile.h"
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN 1
@@ -18,7 +18,7 @@ void watch_file_callback(PVOID lpParameter, BOOLEAN TimerOrWaitFired) {
 	FindNextChangeNotification(arg->watchHandle);
 }
 
-void watch_file_W32(std::wstring filename, std::function<void()> onChange) {
+void watchFile_W32(std::wstring filename, std::function<void()> onChange) {
 	std::filesystem::path path(filename);
 	auto absolutePath = std::filesystem::absolute(path).parent_path();
 
@@ -43,8 +43,8 @@ void watch_file_W32(std::wstring filename, std::function<void()> onChange) {
 
 #endif
 
-void dcanvas::watch_file(std::wstring filename, std::function<void()> onChange) {
+void dcanvas::watchFile(std::wstring filename, std::function<void()> onChange) {
 #ifdef _WIN32
-	watch_file_W32(filename, onChange);
+	watchFile_W32(filename, onChange);
 #endif
 }

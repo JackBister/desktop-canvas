@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include "../../duktape.h"
-#include "duk_console.h"
+#include "dukConsole.h"
 
 /* XXX: Add some form of log level filtering. */
 

@@ -4,5 +4,5 @@
 #include <string>
 
 namespace dcanvas {
-	uint8_t hex_to_byte(std::string const&);
+	uint8_t hexToByte(std::string const&);
 }
