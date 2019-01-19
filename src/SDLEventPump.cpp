@@ -4,12 +4,12 @@
 
 #include "Input/SDLKeyToDOMKey.h"
 
-void SDLEventPump::pumpEvents(IJavaScriptEngine * into)
+bool SDLEventPump::pumpEvents(IJavaScriptEngine * into)
 {
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {
 		if (e.type == SDL_QUIT) {
-			// TODO: 
+			return true;
 		}
 		if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP) {
 			auto key = e.key;
@@ -39,4 +39,5 @@ void SDLEventPump::pumpEvents(IJavaScriptEngine * into)
 			into->callGlobalFunction("onmousedown", mouseEvent);
 		}
 	}
+	return false;
 }

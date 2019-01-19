@@ -124,7 +124,10 @@ int main(int argc, char **argv) {
 
 
 	for(;;) {
-		g_eventPump->pumpEvents(g_jsEngine.get());
+		bool shouldQuit = g_eventPump->pumpEvents(g_jsEngine.get());
+		if (shouldQuit) {
+			goto end;
+		}
 
 		if (g_shouldEvalFile) {
 			g_lastFileEval = std::chrono::high_resolution_clock::now();
