@@ -13,7 +13,7 @@ install:
         }
 
         if (-Not (Test-Path premake5.exe)) {
-            Start-FileDownload 'https://github.com/premake/premake-core/releases/download/v5.0.0-alpha12/premake-5.0.0-alpha12-windows.zip' -FileName 'premake5.zip'
+            Start-FileDownload 'https://github.com/premake/premake-core/releases/download/v5.0.0-alpha13/premake-5.0.0-alpha13-windows.zip' -FileName 'premake5.zip'            
 
             7z x premake5.zip
         }
