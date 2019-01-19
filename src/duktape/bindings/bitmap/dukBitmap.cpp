@@ -35,7 +35,7 @@ static int loadBitmap(duk_context * ctx) {
 	size_t fileLength = 0;
 	auto file = dcanvas::slurpFile(filename.c_str(), &fileLength);
 
-	auto bitmap = canvas->createBitmap(file, fileLength);
+	auto bitmap = canvas->createBitmap(file.get(), fileLength);
 
 	duk_push_object(ctx);
 

@@ -12,10 +12,10 @@ std::string dcanvas::slurpFile(std::string const& filename)
 	char * buffer = (char *) SDL_LoadFile(filename.c_str(), &length);
 
 	auto ret = std::string(buffer, buffer + length);
-	free(buffer);
+	SDL_free(buffer);
 	return ret;
 }
 
-void * dcanvas::slurpFile(std::string const& filename, size_t * length) {
-	return SDL_LoadFile(filename.c_str(), length);
+std::unique_ptr<void, void(*)(void*)> dcanvas::slurpFile(std::string const& filename, size_t * length) {
+	return std::unique_ptr<void, void(*)(void*)>(SDL_LoadFile(filename.c_str(), length), SDL_free);
 }

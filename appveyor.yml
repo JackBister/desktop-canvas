@@ -4,39 +4,32 @@ image:
 - Visual Studio 2017
 configuration: Release
 platform: x64
+cache:
+- '%USERPROFILE%\.conan'
+- premake5.exe
+- premake5
 install:
 - ps: >-
     if ($isWindows) {
-        if (-Not (Test-Path installed)) {
-            vcpkg install sdl2:x64-windows sdl2-ttf:x64-windows asio:x64-windows websocketpp:x64-windows
-            Copy-Item 'c:\tools\vcpkg\installed' -Destination 'installed' -Recurse
-        }
-
         if (-Not (Test-Path premake5.exe)) {
             Start-FileDownload 'https://github.com/premake/premake-core/releases/download/v5.0.0-alpha13/premake-5.0.0-alpha13-windows.zip' -FileName 'premake5.zip'            
 
             7z x premake5.zip
         }
     } else {
-        if (-Not (Test-Path installed)) {
-            git clone https://github.com/Microsoft/vcpkg.git /home/appveyor/projects/vcpkg
-            cd /home/appveyor/projects/vcpkg
-            sh bootstrap-vcpkg.sh
-            ./vcpkg install sdl2:x64-linux sdl2-ttf:x64-linux asio:x64-linux websocketpp:x64-linux zlib:x64-linux
-            Copy-Item 'installed' -Destination "$env:APPVEYOR_BUILD_FOLDER/installed" -Recurse
-            cd $env:APPVEYOR_BUILD_FOLDER
-        }
-
         if (-Not (Test-Path premake5)) {
             Start-FileDownload 'https://github.com/premake/premake-core/releases/download/v5.0.0-alpha13/premake-5.0.0-alpha13-linux.tar.gz' -FileName 'premake5.tar.gz'
 
             tar -xvf premake5.tar.gz
         }
     }
-cache:
-- installed -> appveyor.yml
-- premake5.exe
-- premake5
+    set PATH=%PATH%;%PYTHON%/Scripts/
+    pip install conan
+    conan remote clean
+    conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+    mkdir build
+    cd build
+    conan install ..
 build_script:
 - ps: >-
     if ($isWindows) {

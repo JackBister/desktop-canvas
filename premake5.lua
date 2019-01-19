@@ -1,4 +1,5 @@
 #!lua
+require("build/conanbuildinfo")
 
 function isModuleAvailable(name)
 	if package.loaded[name] then
@@ -36,9 +37,6 @@ solution "desktop-canvas"
 			systemversion(sysversion .. ".0")
 		end
 
-	local platformdirectory = "installed/%{cfg.platform}-%{cfg.system}/"
-	local staticPlatformDirectory = "installed/%{cfg.platform}-%{cfg.system}-static/"
-
 	project "Main"
 		kind "ConsoleApp"
 		language "C++"
@@ -55,7 +53,7 @@ solution "desktop-canvas"
 		-- Appveyor VS does not like to compile websocketpp without this flag(?)
 		defines { "_HAS_AUTO_PTR_ETC" }
 
-		sysincludedirs { "include",  staticPlatformDirectory .. "include", platformdirectory .. "include" }
+		sysincludedirs { conan_includedirs_asio, conan_includedirs_sdl2, conan_includedirs_sdl2_ttf, conan_includedirs_websocketpp }
 
 		local androidHome = os.getenv("ANDROID_HOME")
 		if androidHome ~= nil then
@@ -72,25 +70,25 @@ solution "desktop-canvas"
 			linkoptions { "-pthread" }
 
 		filter "Debug"
-			libdirs { staticPlatformDirectory .. "debug/lib", platformdirectory .. "debug/lib" }
+			libdirs { conan_libdirs_sdl2, conan_libdirs_sdl2_ttf }
 			optimize "Off"
 			symbols "On"
 
 		filter "Release"
-			libdirs { staticPlatformDirectory .. "lib", platformdirectory .. "lib" }
+			libdirs { conan_libdirs_sdl2, conan_libdirs_sdl2_ttf }
 			optimize "Full"
 
 		filter { "system:windows", "Debug" }
-			links { "SDL2d", "SDL2_ttf" }
+			links { conan_libs_sdl2, conan_libs_sdl2_ttf }
 
 		filter { "system:windows", "Release" }
-			links { "SDL2", "SDL2_ttf" }
+			links { conan_libs_sdl2, conan_libs_sdl2_ttf }
 
 		filter { "system:linux", "Debug" }
-			links { "SDL2d", "SDL2_ttf", "crypto", "dl", "freetyped", "bz2d", "png", "stdc++fs", "z" }
+			links { conan_libs_sdl2, conan_libs_sdl2_ttf, "stdc++fs" }
 
 		filter { "system:linux", "Release" }
-			links { "SDL2", "SDL2_ttf", "crypto", "dl", "freetype", "bz2", "png", "stdc++fs", "z" }
+			links { conan_libs_sdl2, conan_libs_sdl2_ttf, "stdc++fs" }
 
 		filter { "files:src/**_android.*" }
 			flags {"ExcludeFromBuild"}
