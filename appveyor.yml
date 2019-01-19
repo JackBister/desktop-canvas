@@ -23,7 +23,7 @@ install:
             tar -xvf premake5.tar.gz
         }
     }
-    set PATH=%PATH%;%PYTHON%/Scripts/
+    $Env:PATH += ";$Env:PYTHON/Scripts/"
     pip install conan
     conan remote clean
     conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
