@@ -48,8 +48,8 @@ if (UNIX)
     find_library(FREETYPE_LIBRARY freetype)
     find_library(PNG_LIBRARY png)
     find_library(ZLIB_LIBRARY z)
-    target_link_libraries(Main ${CMAKE_DL_LIBS} ${FREETYPE_LIBRARY} ${BZ2_LIBRARY} ${PNG_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} ${ZLIB_LIBRARY} stdc++fs)
-    # /usr/lib/gcc/x86_64-linux-gnu/8/libstdc++fs.a)
+    target_link_libraries(Main ${CMAKE_DL_LIBS} ${FREETYPE_LIBRARY} ${BZ2_LIBRARY} ${PNG_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} ${ZLIB_LIBRARY}
+        /usr/lib/gcc/x86_64-linux-gnu/8/libstdc++fs.a)
 endif()
 # ===END MAIN EXECUTABLE===
 
