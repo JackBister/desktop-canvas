@@ -6,10 +6,12 @@
 #include <SDL2/SDL_config_android.h>
 #include <SDL2/SDL.h>
 
+#include "Canvas/SDLCanvasRenderingContext2D.h"
 #include "DukJavaScriptEngine.h"
 #include "JavaScriptEngine.h"
-#include "Canvas/SDLCanvasRenderingContext2D.h"
+#include "SDLEventPump.h"
 
+std::unique_ptr<EventPump> g_eventPump = std::make_unique<SDLEventPump>();
 std::unique_ptr<IJavaScriptEngine> g_jsEngine;
 
 int main(int argc, char *argv[]) {
@@ -56,12 +58,7 @@ int main(int argc, char *argv[]) {
 
 
 	for (;;) {
-		SDL_Event e;
-		while (SDL_PollEvent(&e)) {
-			if (e.type == SDL_QUIT) {
-				goto end;
-			}
-		}
+		auto shouldQuit = g_eventPump->pumpEvents(g_jsEngine.get());
 
 		SDL_SetRenderTarget(renderer, backbuffer);
 		g_jsEngine->preTick();
