@@ -34,7 +34,7 @@ constexpr int MIN_DURATION_BETWEEN_FILE_EVALS_SECONDS = 5;
 std::chrono::high_resolution_clock::time_point g_lastFileEval;
 std::atomic_bool g_shouldEvalFile = false;
 
-std::unique_ptr<EventPump> g_eventPump = std::make_unique<SDLEventPump>();
+std::unique_ptr<EventPump> g_eventPump;
 std::unique_ptr<IJavaScriptEngine> g_jsEngine;
 
 struct {
@@ -100,7 +100,9 @@ int main(int argc, char **argv) {
 
 	ICanvasRenderingContext2D * canvas = new SDLCanvasRenderingContext2D(renderer, windowSurface);
 
+	// TODO: Configurable
 	SDL_RenderSetLogicalSize(renderer, 400, 225);
+	g_eventPump = std::make_unique<SDLEventPump>(std::pair<int, int>(400, 225));
 
 	dcanvas::watchFile(g_options.filename.wstring(), [&]() {
 		auto now = std::chrono::high_resolution_clock::now();

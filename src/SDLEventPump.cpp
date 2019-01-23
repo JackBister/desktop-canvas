@@ -3,6 +3,23 @@
 #include <SDL2/SDL.h>
 
 #include "Input/SDLKeyToDOMKey.h"
+#include "Logger/Logger.h"
+
+static auto logger = ILogger::get();
+
+static std::string getTouchEventType(Uint32 t) {
+	switch (t) {
+	case SDL_FINGERDOWN:
+		return "touchstart";
+	case SDL_FINGERUP:
+		return "touchend";
+	default:
+		logger->info("Unhandled EventType in getTouchEventType %d", t);
+		return "";
+	}
+}
+
+SDLEventPump::SDLEventPump(std::pair<int, int> windowSize) : windowSize(windowSize) { }
 
 bool SDLEventPump::pumpEvents(IJavaScriptEngine * into)
 {
@@ -37,6 +54,31 @@ bool SDLEventPump::pumpEvents(IJavaScriptEngine * into)
 				{ "clientY", (double)mouse.y }
 			};
 			into->callGlobalFunction("onmousedown", mouseEvent);
+		} else if (e.type == SDL_FINGERDOWN || e.type == SDL_FINGERUP) {
+			auto finger = e.tfinger;
+
+			// finger.x/finger.y are 0..1 normalized, need to convert to screen coordinates
+			auto clientX = finger.x * windowSize.first;
+			auto clientY = finger.y * windowSize.second;
+
+			JSObject touch = {
+				{ "clientX", (double)clientX },
+				{ "clientY", (double)clientY },
+				{ "force", finger.pressure }
+			};
+
+			JSArray changedTouches = { touch };
+
+			JSObject touchEvent = {
+				{ "type", getTouchEventType(e.type) },
+				{ "changedTouches", changedTouches }
+			};
+
+			if (e.type == SDL_FINGERDOWN) {
+				into->callGlobalFunction("ontouchstart", touchEvent);
+			} else {
+				into->callGlobalFunction("ontouchend", touchEvent);
+			}
 		}
 	}
 	return false;

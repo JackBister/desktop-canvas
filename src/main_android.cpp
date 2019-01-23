@@ -11,7 +11,7 @@
 #include "JavaScriptEngine.h"
 #include "SDLEventPump.h"
 
-std::unique_ptr<EventPump> g_eventPump = std::make_unique<SDLEventPump>();
+std::unique_ptr<EventPump> g_eventPump;
 std::unique_ptr<IJavaScriptEngine> g_jsEngine;
 
 int main(int argc, char *argv[]) {
@@ -43,12 +43,14 @@ int main(int argc, char *argv[]) {
 
 	ICanvasRenderingContext2D * canvas = new SDLCanvasRenderingContext2D(renderer, surface);
 
-	auto backbuffer = SDL_CreateTexture(renderer, SDL_GetWindowPixelFormat(window), SDL_TEXTUREACCESS_TARGET, 320, 180);
+	auto backbuffer = SDL_CreateTexture(renderer, SDL_GetWindowPixelFormat(window), SDL_TEXTUREACCESS_TARGET, 400, 225);
 	SDL_SetRenderTarget(renderer, backbuffer);
 
+	// TODO: Configurable
 	if (SDL_RenderSetLogicalSize(renderer, 400, 225)) {
 		__android_log_print(ANDROID_LOG_INFO, "dcanvas", "RenderSetLogicalSize failed, %s", SDL_GetError());
 	}
+	g_eventPump = std::make_unique<SDLEventPump>(std::pair<int, int>(400, 225));
 
 	g_jsEngine = std::make_unique<DukJavaScriptEngine>();
 	g_jsEngine->evalFile("app.js");
@@ -58,9 +60,13 @@ int main(int argc, char *argv[]) {
 
 
 	for (;;) {
-		auto shouldQuit = g_eventPump->pumpEvents(g_jsEngine.get());
-
 		SDL_SetRenderTarget(renderer, backbuffer);
+
+		bool shouldQuit = g_eventPump->pumpEvents(g_jsEngine.get());
+		if (shouldQuit) {
+			goto end;
+		}
+
 		g_jsEngine->preTick();
 		g_jsEngine->callGlobalFunction("tick");
 

@@ -22,6 +22,13 @@ static void pushJsValue(duk_context * ctx, JSValue value) {
 		}
 	} else if (paramType == JSValue::Type::STRING) {
 		duk_push_string(ctx, std::get<std::string>(value).c_str());
+	} else if (paramType == JSValue::Type::ARRAY) {
+		auto arr = std::get<JSArray>(value);
+		auto arrIdx = duk_push_array(ctx);
+		for (size_t i = 0; i < arr.size(); ++i) {
+			pushJsValue(ctx, arr[i]);
+			duk_put_prop_index(ctx, arrIdx, i);
+		}
 	}
 }
 
