@@ -27,7 +27,7 @@ static void pushJsValue(duk_context * ctx, JSValue value) {
 
 DukJavaScriptEngine::DukJavaScriptEngine() : ctx(duk_create_heap_default(), duk_destroy_heap)
 {
-	duk_console_init(ctx.get(), DUK_CONSOLE_PROXY_WRAPPER);
+	dcanvas::initConsole(ctx.get());
 }
 
 DukJavaScriptEngine::~DukJavaScriptEngine()
