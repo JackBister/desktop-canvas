@@ -75,9 +75,9 @@ static int setFont(duk_context * ctx) {
 }
 
 namespace dcanvas {
-	auto logger = ILogger::get();
+	auto logger = Logger::get();
 
-	void initCanvas(duk_context * ctx, ICanvasRenderingContext2D * canvas) {
+	void initCanvas(duk_context * ctx, CanvasRenderingContext2D * canvas) {
 
 
 		duk_get_global_string(ctx, "init");

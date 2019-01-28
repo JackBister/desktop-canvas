@@ -4,7 +4,7 @@
 
 #include "Bitmap.h"
 
-class ICanvasRenderingContext2D {
+class CanvasRenderingContext2D {
 public:
 	// Though this method is not connected to the canvas context in JS, it is put here because it is often coupled with how the bitmap is drawn
 	virtual Bitmap * createBitmap(void * data, size_t size) = 0;
@@ -23,5 +23,5 @@ public:
 	virtual std::string const& getFillStyle() = 0;
 	virtual void setFillStyle(std::string const& val) = 0;
 
-	virtual ~ICanvasRenderingContext2D();
+	virtual ~CanvasRenderingContext2D();
 };

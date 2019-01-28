@@ -6,7 +6,7 @@
 #include "../../../Logger/Logger.h"
 #include "../../../WebSocket/WebSocketpp.h"
 
-static auto logger = ILogger::get();
+static auto logger = Logger::get();
 static SafeQueue<std::pair<std::function<void(duk_context *, MessageEvent)>, MessageEvent>> * webSocketMessageQueue = nullptr;
 
 static int close(duk_context * ctx) {

@@ -1,9 +1,9 @@
 #pragma once
 
-class ICanvasRenderingContext2D;
+class CanvasRenderingContext2D;
 
 #include "../../duktape.h"
 
 namespace dcanvas {
-	ICanvasRenderingContext2D * canvasFromCtx(duk_context * ctx);
+	CanvasRenderingContext2D * canvasFromCtx(duk_context * ctx);
 }

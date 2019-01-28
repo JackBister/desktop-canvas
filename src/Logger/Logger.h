@@ -2,9 +2,9 @@
 
 #include <stdarg.h>
 
-class ILogger {
+class Logger {
 public:
-	static ILogger * get();
+	static Logger * get();
 
 	virtual void info(char const * fmt, ...) = 0;
 };

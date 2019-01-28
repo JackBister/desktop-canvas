@@ -4,7 +4,7 @@
 
 #include "Logger/Logger.h"
 
-static auto logger = ILogger::get();
+static auto logger = Logger::get();
 
 std::string dcanvas::slurpFile(std::string const& filename)
 {

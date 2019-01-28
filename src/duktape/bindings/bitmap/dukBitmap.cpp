@@ -6,9 +6,9 @@
 #include "../../../Logger/Logger.h"
 #include "../../../slurpFile.h"
 
-static auto logger = ILogger::get();
+static auto logger = Logger::get();
 
-static ICanvasRenderingContext2D * canvas = nullptr;
+static CanvasRenderingContext2D * canvas = nullptr;
 
 static int finalizeBitmap(duk_context * ctx) {
 	duk_get_prop_string(ctx, -1, "\xFF" "\xFF" "internalPtr");
@@ -65,7 +65,7 @@ static int loadBitmap(duk_context * ctx) {
 }
 
 namespace dcanvas {
-	void initBitmap(duk_context * ctx, ICanvasRenderingContext2D * cvs)
+	void initBitmap(duk_context * ctx, CanvasRenderingContext2D * cvs)
 	{
 		canvas = cvs;
 

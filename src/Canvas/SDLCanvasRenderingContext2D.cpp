@@ -3,7 +3,7 @@
 #include "../Logger/Logger.h"
 #include "../hexToByte.h"
 
-static auto logger = ILogger::get();
+static auto logger = Logger::get();
 
 SDLCanvasRenderingContext2D::SDLCanvasRenderingContext2D(SDL_Renderer * renderer, SDL_Surface * surface) : renderer(renderer), surface(surface), sdlFont(nullptr) {
 	SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);

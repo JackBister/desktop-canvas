@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
-	ICanvasRenderingContext2D * canvas = new SDLCanvasRenderingContext2D(renderer, surface);
+	CanvasRenderingContext2D * canvas = new SDLCanvasRenderingContext2D(renderer, surface);
 
 	auto backbuffer = SDL_CreateTexture(renderer, SDL_GetWindowPixelFormat(window), SDL_TEXTUREACCESS_TARGET, 400, 225);
 	SDL_SetRenderTarget(renderer, backbuffer);

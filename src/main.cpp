@@ -98,7 +98,7 @@ int main(int argc, char **argv) {
 	auto renderer = windowAndRenderer.second;
 	auto windowSurface = SDL_GetWindowSurface(windowAndRenderer.first);
 
-	ICanvasRenderingContext2D * canvas = new SDLCanvasRenderingContext2D(renderer, windowSurface);
+	CanvasRenderingContext2D * canvas = new SDLCanvasRenderingContext2D(renderer, windowSurface);
 
 	// TODO: Configurable
 	SDL_RenderSetLogicalSize(renderer, 400, 225);

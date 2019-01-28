@@ -17,8 +17,8 @@ public:
 	virtual void evalFile(std::string const& filename) = 0;
 	virtual void evalString(std::string const& str) = 0;
 	// TODO: This is badly abstracted
-	virtual void initBitmap(ICanvasRenderingContext2D *) = 0;
-	virtual void initCanvas(ICanvasRenderingContext2D *) = 0;
+	virtual void initBitmap(CanvasRenderingContext2D *) = 0;
+	virtual void initCanvas(CanvasRenderingContext2D *) = 0;
 	virtual void initWebsocket() = 0;
 
 	virtual void preTick() = 0;

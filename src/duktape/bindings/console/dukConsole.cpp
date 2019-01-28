@@ -2,7 +2,7 @@
 
 #include "../../../Logger/Logger.h"
 
-static auto logger = ILogger::get();
+static auto logger = Logger::get();
 
 static duk_ret_t duk__console_log_helper(duk_context *ctx, const char *error_name) {
 	duk_idx_t n = duk_get_top(ctx);

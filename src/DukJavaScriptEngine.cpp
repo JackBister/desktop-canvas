@@ -69,12 +69,12 @@ void DukJavaScriptEngine::evalString(std::string const& str)
 	duk_eval_string(ctx.get(), str.c_str());
 }
 
-void DukJavaScriptEngine::initBitmap(ICanvasRenderingContext2D * canvas)
+void DukJavaScriptEngine::initBitmap(CanvasRenderingContext2D * canvas)
 {
 	dcanvas::initBitmap(ctx.get(), canvas);
 }
 
-void DukJavaScriptEngine::initCanvas(ICanvasRenderingContext2D * canvas)
+void DukJavaScriptEngine::initCanvas(CanvasRenderingContext2D * canvas)
 {
 	dcanvas::initCanvas(ctx.get(), canvas);
 }

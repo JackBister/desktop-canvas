@@ -6,7 +6,7 @@
 #include "DesktopLogger.h"
 #endif
 
-ILogger * ILogger::get()
+Logger * Logger::get()
 {
 #ifdef __ANDROID__
 	static auto ret = new AndroidLogger();

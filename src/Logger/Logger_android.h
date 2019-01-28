@@ -2,7 +2,7 @@
 
 #include "Logger.h"
 
-class AndroidLogger : public ILogger {
+class AndroidLogger : public Logger {
 public:
 	virtual void info(char const * fmt, ...) override;
 };

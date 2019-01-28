@@ -2,8 +2,8 @@
 
 #include "../../duktape.h"
 
-class ICanvasRenderingContext2D;
+class CanvasRenderingContext2D;
 
 namespace dcanvas {
-	void initBitmap(duk_context * ctx, ICanvasRenderingContext2D * canvas);
+	void initBitmap(duk_context * ctx, CanvasRenderingContext2D * canvas);
 }

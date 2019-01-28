@@ -5,7 +5,7 @@
 #include "Input/SDLKeyToDOMKey.h"
 #include "Logger/Logger.h"
 
-static auto logger = ILogger::get();
+static auto logger = Logger::get();
 
 static std::string getTouchEventType(Uint32 t) {
 	switch (t) {

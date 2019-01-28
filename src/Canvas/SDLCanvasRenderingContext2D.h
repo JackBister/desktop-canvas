@@ -11,7 +11,7 @@
 
 #include "SDLBitmap.h"
 
-class SDLCanvasRenderingContext2D : public ICanvasRenderingContext2D {
+class SDLCanvasRenderingContext2D : public CanvasRenderingContext2D {
 public:
 	SDLCanvasRenderingContext2D(SDL_Renderer * renderer, SDL_Surface * surface);
 

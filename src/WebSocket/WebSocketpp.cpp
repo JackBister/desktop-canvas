@@ -2,7 +2,7 @@
 
 #include "../Logger/Logger.h"
 
-static auto logger = ILogger::get();
+static auto logger = Logger::get();
 
 static void runClient(WebSocketpp * ws) {
 }

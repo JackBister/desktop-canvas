@@ -20,8 +20,8 @@ public:
 	virtual void callGlobalFunction(std::string const& function_name, JSValue parameters) override;
 	virtual void evalFile(std::string const & filename) override;
 	virtual void evalString(std::string const & str) override;
-	virtual void initBitmap(ICanvasRenderingContext2D *) override;
-	virtual void initCanvas(ICanvasRenderingContext2D *) override;
+	virtual void initBitmap(CanvasRenderingContext2D *) override;
+	virtual void initCanvas(CanvasRenderingContext2D *) override;
 	virtual void initWebsocket() override;
 	virtual void preTick() override;
 
