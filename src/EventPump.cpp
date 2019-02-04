@@ -1,5 +1,3 @@
 #include "EventPump.h"
 
-EventPump::~EventPump()
-{
-}
+EventPump::~EventPump() {}

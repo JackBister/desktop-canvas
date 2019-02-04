@@ -1,8 +1,9 @@
 #pragma once
 
-#include "../../duktape.h"
 #include "../../../Canvas/CanvasRenderingContext2D.h"
+#include "../../duktape.h"
 
-namespace dcanvas {
-	void initCanvas(duk_context * ctx, CanvasRenderingContext2D * canvas);
+namespace dcanvas
+{
+void initCanvas(duk_context * ctx, CanvasRenderingContext2D * canvas);
 }

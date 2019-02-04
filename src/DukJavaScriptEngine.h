@@ -4,31 +4,33 @@
 
 #include <functional>
 
-#include "duktape/duktape.h"
-#include "WebSocket/MessageEvent.h"
 #include "SafeQueue.h"
+#include "WebSocket/MessageEvent.h"
+#include "duktape/duktape.h"
 
 struct SDL_Renderer;
 struct SDL_Surface;
 
-class DukJavaScriptEngine : public IJavaScriptEngine {
+class DukJavaScriptEngine : public IJavaScriptEngine
+{
 public:
-	DukJavaScriptEngine();
-	~DukJavaScriptEngine() override;
+  DukJavaScriptEngine();
+  ~DukJavaScriptEngine() override;
 
-	virtual void callGlobalFunction(std::string const & function_name) override;
-	virtual void callGlobalFunction(std::string const& function_name, JSValue parameters) override;
-	virtual void evalFile(std::string const & filename) override;
-	virtual void evalString(std::string const & str) override;
-	virtual void initBitmap(CanvasRenderingContext2D *) override;
-	virtual void initCanvas(CanvasRenderingContext2D *) override;
-	virtual void initNavigator(Navigator *) override;
-	virtual void initWebsocket() override;
-	virtual void preTick() override;
+  virtual void callGlobalFunction(std::string const & function_name) override;
+  virtual void callGlobalFunction(std::string const & function_name, JSValue parameters) override;
+  virtual void evalFile(std::string const & filename) override;
+  virtual void evalString(std::string const & str) override;
+  virtual void initBitmap(CanvasRenderingContext2D *) override;
+  virtual void initCanvas(CanvasRenderingContext2D *) override;
+  virtual void initNavigator(Navigator *) override;
+  virtual void initWebsocket() override;
+  virtual void preTick() override;
 
 private:
-	using DukDestroyer = void(*)(duk_context *);
-	std::unique_ptr<duk_context, DukDestroyer> ctx;
+  using DukDestroyer = void (*)(duk_context *);
+  std::unique_ptr<duk_context, DukDestroyer> ctx;
 
-	SafeQueue<std::pair<std::function<void(duk_context *, MessageEvent)>, MessageEvent>> webSocketMessageQueue;
+  SafeQueue<std::pair<std::function<void(duk_context *, MessageEvent)>, MessageEvent>>
+      webSocketMessageQueue;
 };

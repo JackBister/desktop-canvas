@@ -9,10 +9,10 @@
 Logger * Logger::get()
 {
 #ifdef __ANDROID__
-	static auto ret = new AndroidLogger();
-	return ret;
+  static auto ret = new AndroidLogger();
+  return ret;
 #else
-	static auto ret = new DesktopLogger();
-	return ret;
+  static auto ret = new DesktopLogger();
+  return ret;
 #endif
 }

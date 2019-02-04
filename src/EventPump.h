@@ -2,9 +2,10 @@
 
 #include "JavaScriptEngine.h"
 
-class EventPump {
+class EventPump
+{
 public:
-	virtual bool pumpEvents(IJavaScriptEngine * into) = 0;
-	
-	virtual ~EventPump();
+  virtual bool pumpEvents(IJavaScriptEngine * into) = 0;
+
+  virtual ~EventPump();
 };

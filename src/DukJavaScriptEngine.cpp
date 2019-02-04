@@ -11,65 +11,63 @@
 
 DukJavaScriptEngine::DukJavaScriptEngine() : ctx(duk_create_heap_default(), duk_destroy_heap)
 {
-	dcanvas::initConsole(ctx.get());
+  dcanvas::initConsole(ctx.get());
 }
 
-DukJavaScriptEngine::~DukJavaScriptEngine()
+DukJavaScriptEngine::~DukJavaScriptEngine() {}
+
+void DukJavaScriptEngine::callGlobalFunction(std::string const & function_name)
 {
+  duk_get_global_string(ctx.get(), function_name.c_str());
+  duk_pcall(ctx.get(), 0);
+  duk_pop(ctx.get());
 }
 
-void DukJavaScriptEngine::callGlobalFunction(std::string const& function_name)
+void DukJavaScriptEngine::callGlobalFunction(std::string const & function_name, JSValue parameters)
 {
-	duk_get_global_string(ctx.get(), function_name.c_str());
-	duk_pcall(ctx.get(), 0);
-	duk_pop(ctx.get());
+  duk_get_global_string(ctx.get(), function_name.c_str());
+
+  dcanvas::dukUtils::pushToCtx(ctx.get(), parameters);
+
+  duk_pcall(ctx.get(), 1);
+  duk_pop(ctx.get());
 }
 
-void DukJavaScriptEngine::callGlobalFunction(std::string const& function_name, JSValue parameters)
+void DukJavaScriptEngine::evalFile(std::string const & filename)
 {
-	duk_get_global_string(ctx.get(), function_name.c_str());
-
-	dcanvas::dukUtils::pushToCtx(ctx.get(), parameters);
-
-	duk_pcall(ctx.get(), 1);
-	duk_pop(ctx.get());
+  auto fileContents = dcanvas::slurpFile(filename);
+  duk_eval_string(ctx.get(), fileContents.c_str());
 }
 
-void DukJavaScriptEngine::evalFile(std::string const& filename)
+void DukJavaScriptEngine::evalString(std::string const & str)
 {
-	auto fileContents = dcanvas::slurpFile(filename);
-	duk_eval_string(ctx.get(), fileContents.c_str());
-}
-
-void DukJavaScriptEngine::evalString(std::string const& str)
-{
-	duk_eval_string(ctx.get(), str.c_str());
+  duk_eval_string(ctx.get(), str.c_str());
 }
 
 void DukJavaScriptEngine::initBitmap(CanvasRenderingContext2D * canvas)
 {
-	dcanvas::initBitmap(ctx.get(), canvas);
+  dcanvas::initBitmap(ctx.get(), canvas);
 }
 
 void DukJavaScriptEngine::initCanvas(CanvasRenderingContext2D * canvas)
 {
-	dcanvas::initCanvas(ctx.get(), canvas);
+  dcanvas::initCanvas(ctx.get(), canvas);
 }
 
 void DukJavaScriptEngine::initNavigator(Navigator * navigator)
 {
-	dcanvas::initNavigator(ctx.get(), navigator);
+  dcanvas::initNavigator(ctx.get(), navigator);
 }
 
 void DukJavaScriptEngine::initWebsocket()
 {
-	dcanvas::initWebsocket(ctx.get(), &webSocketMessageQueue);
+  dcanvas::initWebsocket(ctx.get(), &webSocketMessageQueue);
 }
 
 void DukJavaScriptEngine::preTick()
 {
-	for (size_t i = 0; i < webSocketMessageQueue.size(); ++i) {
-		auto messageAndHandler = webSocketMessageQueue.pop();
-		messageAndHandler.first(ctx.get(), messageAndHandler.second);
-	}
+  for (size_t i = 0; i < webSocketMessageQueue.size(); ++i) {
+    auto messageAndHandler = webSocketMessageQueue.pop();
+    messageAndHandler.first(ctx.get(), messageAndHandler.second);
+  }
 }

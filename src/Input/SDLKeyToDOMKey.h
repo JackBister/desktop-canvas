@@ -8,6 +8,7 @@
 #endif
 #include <SDL2/SDL.h>
 
-namespace dcanvas {
-	std::optional<std::string> SDLKeyToDOMKey(SDL_Keycode keycode);
+namespace dcanvas
+{
+std::optional<std::string> SDLKeyToDOMKey(SDL_Keycode keycode);
 }

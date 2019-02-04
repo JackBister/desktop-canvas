@@ -1,5 +1,3 @@
 #include "JavaScriptEngine.h"
 
-IJavaScriptEngine::~IJavaScriptEngine()
-{
-}
+IJavaScriptEngine::~IJavaScriptEngine() {}

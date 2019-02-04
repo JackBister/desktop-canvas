@@ -2,7 +2,8 @@
 
 #include <string>
 
-class MessageEvent {
+class MessageEvent
+{
 public:
-	const std::string data;
+  const std::string data;
 };

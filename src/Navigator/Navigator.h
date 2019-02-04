@@ -4,9 +4,10 @@
 
 #include "Gamepad.h"
 
-class Navigator {
+class Navigator
+{
 public:
-	virtual ~Navigator();
+  virtual ~Navigator();
 
-	virtual std::array<Gamepad *, 4> getGamepads() = 0;
+  virtual std::array<Gamepad *, 4> getGamepads() = 0;
 };

@@ -2,12 +2,13 @@
 
 #include "EventPump.h"
 
-class SDLEventPump : public EventPump {
+class SDLEventPump : public EventPump
+{
 public:
-	SDLEventPump(std::pair<int, int> windowSize);
+  SDLEventPump(std::pair<int, int> windowSize);
 
-	virtual bool pumpEvents(IJavaScriptEngine * into) override;
-	
+  virtual bool pumpEvents(IJavaScriptEngine * into) override;
+
 private:
-	std::pair<int, int> windowSize;
+  std::pair<int, int> windowSize;
 };

@@ -5,26 +5,27 @@
 #endif
 #include <SDL2/SDL.h>
 
-SDLBitmap::SDLBitmap(SDL_Texture * texture, int height, int width) : texture(texture), height(height), width(width)
+SDLBitmap::SDLBitmap(SDL_Texture * texture, int height, int width)
+    : texture(texture), height(height), width(width)
 {
 }
 
 int SDLBitmap::getHeight()
 {
-	return height;
+  return height;
 }
 
 int SDLBitmap::getWidth()
 {
-	return width;
+  return width;
 }
 
 void SDLBitmap::close()
 {
-	SDL_DestroyTexture(texture);
+  SDL_DestroyTexture(texture);
 }
 
 SDL_Texture * SDLBitmap::getTexture()
 {
-	return texture;
+  return texture;
 }
