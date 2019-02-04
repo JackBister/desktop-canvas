@@ -1,14 +1,13 @@
 #include "drawImage.h"
 
 #include "../../duktape.h"
+#include "../../dukUtils.h"
 
 #include "../../../Canvas/CanvasRenderingContext2D.h"
 
-#include "canvasFromCtx.h"
-
 static int drawImage3args(duk_context * ctx)
 {
-  auto state = dcanvas::canvasFromCtx(ctx);
+  auto state = dcanvas::dukUtils::fromCtx<CanvasRenderingContext2D>(ctx);
 
   duk_require_object(ctx, -3);
   int dx = duk_require_number(ctx, -2);
@@ -28,7 +27,7 @@ static int drawImage3args(duk_context * ctx)
 
 static int drawImage5args(duk_context * ctx)
 {
-  auto state = dcanvas::canvasFromCtx(ctx);
+  auto state = dcanvas::dukUtils::fromCtx<CanvasRenderingContext2D>(ctx);
 
   duk_require_object(ctx, -5);
   int dx = duk_require_number(ctx, -4);
@@ -50,7 +49,7 @@ static int drawImage5args(duk_context * ctx)
 
 static int drawImage9args(duk_context * ctx)
 {
-  auto state = dcanvas::canvasFromCtx(ctx);
+  auto state = dcanvas::dukUtils::fromCtx<CanvasRenderingContext2D>(ctx);
 
   duk_require_object(ctx, -9);
   int sx = duk_require_number(ctx, -8);

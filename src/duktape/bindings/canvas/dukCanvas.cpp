@@ -4,8 +4,8 @@
 
 #include "../../../Logger/Logger.h"
 #include "../../duktape.h"
+#include "../../dukUtils.h"
 
-#include "canvasFromCtx.h"
 #include "drawImage.h"
 
 static void defineProp(duk_context * ctx, std::string const & name, int (*getter)(duk_context *),
@@ -27,7 +27,7 @@ static void defineMethod(duk_context * ctx, std::string const & name, int (*meth
 
 static int fillRect(duk_context * ctx)
 {
-  auto state = dcanvas::canvasFromCtx(ctx);
+  auto state = dcanvas::dukUtils::fromCtx<CanvasRenderingContext2D>(ctx);
 
   auto x = duk_require_int(ctx, -4);
   auto y = duk_require_int(ctx, -3);
@@ -41,7 +41,7 @@ static int fillRect(duk_context * ctx)
 
 static int fillText(duk_context * ctx)
 {
-  auto state = dcanvas::canvasFromCtx(ctx);
+  auto state = dcanvas::dukUtils::fromCtx<CanvasRenderingContext2D>(ctx);
 
   auto text = duk_require_string(ctx, -3);
   auto x = duk_require_int(ctx, -2);
@@ -54,7 +54,7 @@ static int fillText(duk_context * ctx)
 
 static int getFillStyle(duk_context * ctx)
 {
-  auto state = dcanvas::canvasFromCtx(ctx);
+  auto state = dcanvas::dukUtils::fromCtx<CanvasRenderingContext2D>(ctx);
 
   duk_push_string(ctx, state->getFillStyle().c_str());
   return 1;
@@ -62,7 +62,7 @@ static int getFillStyle(duk_context * ctx)
 
 static int setFillStyle(duk_context * ctx)
 {
-  auto state = dcanvas::canvasFromCtx(ctx);
+  auto state = dcanvas::dukUtils::fromCtx<CanvasRenderingContext2D>(ctx);
 
   state->setFillStyle(std::string(duk_require_string(ctx, -1)));
   return 1;
@@ -70,7 +70,7 @@ static int setFillStyle(duk_context * ctx)
 
 static int getFont(duk_context * ctx)
 {
-  auto state = dcanvas::canvasFromCtx(ctx);
+  auto state = dcanvas::dukUtils::fromCtx<CanvasRenderingContext2D>(ctx);
 
   duk_push_string(ctx, state->getFillStyle().c_str());
   return 1;
@@ -78,7 +78,7 @@ static int getFont(duk_context * ctx)
 
 static int setFont(duk_context * ctx)
 {
-  auto state = dcanvas::canvasFromCtx(ctx);
+  auto state = dcanvas::dukUtils::fromCtx<CanvasRenderingContext2D>(ctx);
 
   state->setFont(std::string(duk_require_string(ctx, -1)));
   return 1;
