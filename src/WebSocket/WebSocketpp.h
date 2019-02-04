@@ -15,21 +15,21 @@
 
 class WebSocketpp : public WebSocket
 {
-public:
-  WebSocketpp(std::string const & url);
+  public:
+    WebSocketpp(std::string const & url);
 
-  virtual void close() override;
-  virtual int getReadyState() override;
-  virtual std::function<void(MessageEvent)> getOnMessage() override;
-  virtual void setOnMessage(std::function<void(MessageEvent)>) override;
-  virtual void send(std::string const &) override;
+    virtual void close() override;
+    virtual int getReadyState() override;
+    virtual std::function<void(MessageEvent)> getOnMessage() override;
+    virtual void setOnMessage(std::function<void(MessageEvent)>) override;
+    virtual void send(std::string const &) override;
 
-private:
-  using Client = websocketpp::client<websocketpp::config::asio_client>;
+  private:
+    using Client = websocketpp::client<websocketpp::config::asio_client>;
 
-  Client client;
-  websocketpp::connection_hdl connectionHandle;
-  std::function<void(MessageEvent)> handler;
-  int readyState = 0;
-  std::thread thread;
+    Client client;
+    websocketpp::connection_hdl connectionHandle;
+    std::function<void(MessageEvent)> handler;
+    int readyState = 0;
+    std::thread thread;
 };

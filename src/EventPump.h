@@ -4,8 +4,8 @@
 
 class EventPump
 {
-public:
-  virtual bool pumpEvents(IJavaScriptEngine * into) = 0;
+  public:
+    virtual bool pumpEvents(IJavaScriptEngine * into) = 0;
 
-  virtual ~EventPump();
+    virtual ~EventPump();
 };

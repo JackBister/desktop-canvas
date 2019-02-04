@@ -4,6 +4,6 @@
 
 class AndroidLogger : public Logger
 {
-public:
-  virtual void info(char const * fmt, ...) override;
+  public:
+    virtual void info(char const * fmt, ...) override;
 };

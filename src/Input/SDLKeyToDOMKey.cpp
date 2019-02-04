@@ -97,8 +97,8 @@ static std::unordered_map<SDL_Keycode, std::string> KEYCODE_MAP{
 
 std::optional<std::string> dcanvas::SDLKeyToDOMKey(SDL_Keycode keycode)
 {
-  if (KEYCODE_MAP.find(keycode) == KEYCODE_MAP.end()) {
-    return {};
-  }
-  return KEYCODE_MAP[keycode];
+    if (KEYCODE_MAP.find(keycode) == KEYCODE_MAP.end()) {
+        return {};
+    }
+    return KEYCODE_MAP[keycode];
 }

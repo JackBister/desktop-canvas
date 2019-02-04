@@ -4,8 +4,8 @@
 
 class Logger
 {
-public:
-  static Logger * get();
+  public:
+    static Logger * get();
 
-  virtual void info(char const * fmt, ...) = 0;
+    virtual void info(char const * fmt, ...) = 0;
 };

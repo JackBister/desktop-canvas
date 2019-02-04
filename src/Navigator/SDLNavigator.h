@@ -7,14 +7,14 @@
 
 class SDLNavigator : public Navigator
 {
-public:
-  SDLNavigator();
-  ~SDLNavigator();
+  public:
+    SDLNavigator();
+    ~SDLNavigator();
 
-  virtual std::array<Gamepad *, 4> getGamepads() override;
+    virtual std::array<Gamepad *, 4> getGamepads() override;
 
-private:
-  static int sdlEventWatch(void * userdata, SDL_Event * evt);
+  private:
+    static int sdlEventWatch(void * userdata, SDL_Event * evt);
 
-  std::vector<SDLGamepad> gamepads;
+    std::vector<SDLGamepad> gamepads;
 };

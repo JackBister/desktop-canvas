@@ -4,6 +4,6 @@
 
 class MessageEvent
 {
-public:
-  const std::string data;
+  public:
+    const std::string data;
 };
