@@ -12,4 +12,5 @@ AlwaysBreakTemplateDeclarations: true
 BreakBeforeBraces: Linux
 ColumnLimit: 100
 FixNamespaceComments: false
+IndentWidth: 4
 PointerAlignment: Middle
