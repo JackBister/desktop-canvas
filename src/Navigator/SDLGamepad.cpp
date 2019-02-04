@@ -1,6 +1,7 @@
 #include "SDLGamepad.h"
 
 #include <cstdint>
+#include <stdexcept>
 
 #include "../Logger/Logger.h"
 
@@ -70,7 +71,7 @@ GamepadButton SDLGamepad::getTrigger(SDL_GameControllerAxis trigger)
 {
 	if (trigger != SDL_CONTROLLER_AXIS_TRIGGERLEFT && trigger != SDL_CONTROLLER_AXIS_TRIGGERRIGHT) {
 		logger->info("ERROR: Invalid input for getTrigger %d", trigger);
-		throw std::exception("Invalid input for getTrigger");
+		throw std::invalid_argument("Invalid input for getTrigger");
 	}
 
 	auto axis = SDL_GameControllerGetAxis(gameController, trigger);
