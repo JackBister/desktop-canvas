@@ -1,5 +1,7 @@
 #include "SDLNavigator.h"
 
+#include <algorithm>
+
 #include <SDL2/SDL.h>
 
 #include "../Logger/Logger.h"
