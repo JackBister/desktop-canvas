@@ -22,6 +22,7 @@ public:
 	virtual void evalString(std::string const & str) override;
 	virtual void initBitmap(CanvasRenderingContext2D *) override;
 	virtual void initCanvas(CanvasRenderingContext2D *) override;
+	virtual void initNavigator(Navigator *) override;
 	virtual void initWebsocket() override;
 	virtual void preTick() override;
 

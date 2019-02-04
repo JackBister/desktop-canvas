@@ -3,34 +3,11 @@
 #include "duktape/bindings/bitmap/dukBitmap.h"
 #include "duktape/bindings/canvas/dukCanvas.h"
 #include "duktape/bindings/console/dukConsole.h"
+#include "duktape/bindings/navigator/dukNavigator.h"
 #include "duktape/bindings/websocket/dukWebsocket.h"
+#include "duktape/dukUtils.h"
 
 #include "slurpFile.h"
-
-static void pushJsValue(duk_context * ctx, JSValue value) {
-	auto paramType = value.index();
-	if (paramType == JSValue::Type::BOOL) {
-		duk_push_boolean(ctx, std::get<bool>(value));
-	} else if (paramType == JSValue::Type::DOUBLE) {
-		duk_push_number(ctx, std::get<double>(value));
-	} else if (paramType == JSValue::Type::OBJECT) {
-		auto object = std::get<JSObject>(value);
-		duk_push_bare_object(ctx);
-		for (auto it = object.begin(); it != object.end(); ++it) {
-			pushJsValue(ctx, it->second);
-			duk_put_prop_string(ctx, -2, it->first.c_str());
-		}
-	} else if (paramType == JSValue::Type::STRING) {
-		duk_push_string(ctx, std::get<std::string>(value).c_str());
-	} else if (paramType == JSValue::Type::ARRAY) {
-		auto arr = std::get<JSArray>(value);
-		auto arrIdx = duk_push_array(ctx);
-		for (size_t i = 0; i < arr.size(); ++i) {
-			pushJsValue(ctx, arr[i]);
-			duk_put_prop_index(ctx, arrIdx, i);
-		}
-	}
-}
 
 DukJavaScriptEngine::DukJavaScriptEngine() : ctx(duk_create_heap_default(), duk_destroy_heap)
 {
@@ -52,7 +29,7 @@ void DukJavaScriptEngine::callGlobalFunction(std::string const& function_name, J
 {
 	duk_get_global_string(ctx.get(), function_name.c_str());
 
-	pushJsValue(ctx.get(), parameters);
+	dcanvas::dukUtils::pushToCtx(ctx.get(), parameters);
 
 	duk_pcall(ctx.get(), 1);
 	duk_pop(ctx.get());
@@ -77,6 +54,11 @@ void DukJavaScriptEngine::initBitmap(CanvasRenderingContext2D * canvas)
 void DukJavaScriptEngine::initCanvas(CanvasRenderingContext2D * canvas)
 {
 	dcanvas::initCanvas(ctx.get(), canvas);
+}
+
+void DukJavaScriptEngine::initNavigator(Navigator * navigator)
+{
+	dcanvas::initNavigator(ctx.get(), navigator);
 }
 
 void DukJavaScriptEngine::initWebsocket()

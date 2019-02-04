@@ -25,9 +25,13 @@
 #include "DukJavaScriptEngine.h"
 #include "Input/SDLKeyToDOMKey.h"
 #include "JavaScriptEngine.h"
+#include "Logger/Logger.h"
+#include "Navigator/SDLNavigator.h"
 #include "SDLEventPump.h"
 #include "slurpFile.h"
 #include "watchFile.h"
+
+static auto logger = Logger::get();
 
 constexpr int MIN_DURATION_BETWEEN_FILE_EVALS_SECONDS = 5;
 
@@ -83,11 +87,6 @@ int main(int argc, char **argv) {
 	using namespace std::chrono_literals;
 	parseArgs(argc, argv);
 
-	auto workingDir = std::filesystem::absolute(g_options.filename);
-	workingDir.remove_filename();
-	std::filesystem::current_path(workingDir);
-	g_options.filename = g_options.filename.filename();
-
 	auto windowAndRendererOptional = initSdl();
 	if (!windowAndRendererOptional.has_value()) {
 		printf("Couldn't create window and renderer: %s", SDL_GetError());
@@ -102,7 +101,16 @@ int main(int argc, char **argv) {
 
 	// TODO: Configurable
 	SDL_RenderSetLogicalSize(renderer, 400, 225);
+	auto numMappings = SDL_GameControllerAddMappingsFromFile("gamecontrollerdb.txt");
+	if (numMappings < 0) {
+		logger->info("Error loading controller mappings %s", SDL_GetError());
+	}
 	g_eventPump = std::make_unique<SDLEventPump>(std::pair<int, int>(400, 225));
+
+	auto workingDir = std::filesystem::absolute(g_options.filename);
+	workingDir.remove_filename();
+	std::filesystem::current_path(workingDir);
+	g_options.filename = g_options.filename.filename();
 
 	dcanvas::watchFile(g_options.filename.wstring(), [&]() {
 		auto now = std::chrono::high_resolution_clock::now();
@@ -115,12 +123,14 @@ int main(int argc, char **argv) {
 		g_shouldEvalFile = true;
 	});
 
+	auto navigator = new SDLNavigator();
 
 	g_jsEngine = std::make_unique<DukJavaScriptEngine>();
 	g_lastFileEval = std::chrono::high_resolution_clock::now();
 	g_jsEngine->evalFile(g_options.filename.u8string().c_str());
 
 	g_jsEngine->initBitmap(canvas);
+	g_jsEngine->initNavigator(navigator);
 	g_jsEngine->initWebsocket();
 	g_jsEngine->initCanvas(canvas);
 
@@ -139,6 +149,7 @@ int main(int argc, char **argv) {
 			g_jsEngine->evalFile(g_options.filename.u8string().c_str());
 
 			g_jsEngine->initBitmap(canvas);
+			g_jsEngine->initNavigator(navigator);
 			g_jsEngine->initWebsocket();
 			g_jsEngine->initCanvas(canvas);
 		}

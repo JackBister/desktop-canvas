@@ -6,6 +6,7 @@
 
 #include "JSValue.h"
 #include "Canvas/CanvasRenderingContext2D.h"
+#include "Navigator/Navigator.h"
 
 struct SDL_Renderer;
 struct SDL_Surface;
@@ -19,6 +20,7 @@ public:
 	// TODO: This is badly abstracted
 	virtual void initBitmap(CanvasRenderingContext2D *) = 0;
 	virtual void initCanvas(CanvasRenderingContext2D *) = 0;
+	virtual void initNavigator(Navigator *) = 0;
 	virtual void initWebsocket() = 0;
 
 	virtual void preTick() = 0;
