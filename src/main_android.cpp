@@ -12,7 +12,7 @@
 #include "SDLEventPump.h"
 
 std::unique_ptr<EventPump> g_eventPump;
-std::unique_ptr<IJavaScriptEngine> g_jsEngine;
+std::unique_ptr<JavaScriptEngine> g_jsEngine;
 
 int main(int argc, char * argv[])
 {

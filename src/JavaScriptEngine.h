@@ -11,7 +11,7 @@
 struct SDL_Renderer;
 struct SDL_Surface;
 
-class IJavaScriptEngine
+class JavaScriptEngine
 {
   public:
     virtual void callGlobalFunction(std::string const & functionName) = 0;
@@ -26,5 +26,5 @@ class IJavaScriptEngine
 
     virtual void preTick() = 0;
 
-    virtual ~IJavaScriptEngine();
+    virtual ~JavaScriptEngine();
 };

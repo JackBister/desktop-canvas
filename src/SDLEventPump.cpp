@@ -22,7 +22,7 @@ static std::string getTouchEventType(Uint32 t)
 
 SDLEventPump::SDLEventPump(std::pair<int, int> windowSize) : windowSize(windowSize) {}
 
-bool SDLEventPump::pumpEvents(IJavaScriptEngine * into)
+bool SDLEventPump::pumpEvents(JavaScriptEngine * into)
 {
     SDL_Event e;
     while (SDL_PollEvent(&e)) {

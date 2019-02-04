@@ -39,7 +39,7 @@ std::chrono::high_resolution_clock::time_point g_lastFileEval;
 std::atomic_bool g_shouldEvalFile = false;
 
 std::unique_ptr<EventPump> g_eventPump;
-std::unique_ptr<IJavaScriptEngine> g_jsEngine;
+std::unique_ptr<JavaScriptEngine> g_jsEngine;
 
 struct {
     std::filesystem::path filename;

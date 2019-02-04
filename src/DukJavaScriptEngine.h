@@ -11,7 +11,7 @@
 struct SDL_Renderer;
 struct SDL_Surface;
 
-class DukJavaScriptEngine : public IJavaScriptEngine
+class DukJavaScriptEngine : public JavaScriptEngine
 {
   public:
     DukJavaScriptEngine();
