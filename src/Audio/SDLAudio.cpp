@@ -19,8 +19,10 @@ void SDLAudio::pause()
         // -1 is used as a sentinel value for an Audio that hasn't been play()ed yet
         return;
     }
-    // TODO: This doesn't really work
-    Mix_Pause(channel);
+    auto currentlyPlaying = Mix_GetChunk(channel);
+    if (currentlyPlaying == chunk) {
+		Mix_Pause(channel);
+	}
 }
 
 void SDLAudio::play()
