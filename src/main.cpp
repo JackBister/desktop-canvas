@@ -8,6 +8,7 @@
 #include <SDL2/SDL_config_android.h>
 #endif
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 
 /*
@@ -65,6 +66,10 @@ std::optional<std::pair<SDL_Window *, SDL_Renderer *>> initSdl()
         return {};
     }
     if (TTF_Init()) {
+        return {};
+    }
+
+    if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096)) {
         return {};
     }
 
@@ -134,6 +139,7 @@ int main(int argc, char ** argv)
     g_lastFileEval = std::chrono::high_resolution_clock::now();
     g_jsEngine->evalFile(g_options.filename.u8string().c_str());
 
+    g_jsEngine->initAudio();
     g_jsEngine->initBitmap(canvas);
     g_jsEngine->initNavigator(navigator);
     g_jsEngine->initWebsocket();
@@ -152,6 +158,7 @@ int main(int argc, char ** argv)
             g_jsEngine = std::make_unique<DukJavaScriptEngine>();
             g_jsEngine->evalFile(g_options.filename.u8string().c_str());
 
+            g_jsEngine->initAudio();
             g_jsEngine->initBitmap(canvas);
             g_jsEngine->initNavigator(navigator);
             g_jsEngine->initWebsocket();

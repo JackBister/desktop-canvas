@@ -5,6 +5,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_config_android.h>
+#include <SDL2/SDL_mixer.h>
 
 #include "Canvas/SDLCanvasRenderingContext2D.h"
 #include "DukJavaScriptEngine.h"
@@ -47,6 +48,10 @@ int main(int argc, char * argv[])
         }
     }
 
+    if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096)) {
+        __android_log_print(ANDROID_LOG_INFO, "dcanvas", "Mix_OpenAudio error %s", SDL_GetError());
+    }
+
     CanvasRenderingContext2D * canvas = new SDLCanvasRenderingContext2D(renderer, surface);
 
     auto backbuffer = SDL_CreateTexture(renderer, SDL_GetWindowPixelFormat(window),
@@ -62,6 +67,7 @@ int main(int argc, char * argv[])
 
     g_jsEngine = std::make_unique<DukJavaScriptEngine>();
     g_jsEngine->evalFile("app.js");
+    g_jsEngine->initAudio();
     g_jsEngine->initBitmap(canvas);
     g_jsEngine->initWebsocket();
     g_jsEngine->initCanvas(canvas);

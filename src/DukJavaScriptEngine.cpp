@@ -1,5 +1,6 @@
 #include "DukJavaScriptEngine.h"
 
+#include "duktape/bindings/audio/dukAudio.h"
 #include "duktape/bindings/bitmap/dukBitmap.h"
 #include "duktape/bindings/canvas/dukCanvas.h"
 #include "duktape/bindings/console/dukConsole.h"
@@ -42,6 +43,11 @@ void DukJavaScriptEngine::evalFile(std::string const & filename)
 void DukJavaScriptEngine::evalString(std::string const & str)
 {
     duk_eval_string(ctx.get(), str.c_str());
+}
+
+void DukJavaScriptEngine::initAudio()
+{
+    dcanvas::initAudio(ctx.get());
 }
 
 void DukJavaScriptEngine::initBitmap(CanvasRenderingContext2D * canvas)

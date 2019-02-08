@@ -21,6 +21,7 @@ class DukJavaScriptEngine : public JavaScriptEngine
     virtual void callGlobalFunction(std::string const & function_name, JSValue parameters) override;
     virtual void evalFile(std::string const & filename) override;
     virtual void evalString(std::string const & str) override;
+    virtual void initAudio() override;
     virtual void initBitmap(CanvasRenderingContext2D *) override;
     virtual void initCanvas(CanvasRenderingContext2D *) override;
     virtual void initNavigator(Navigator *) override;
