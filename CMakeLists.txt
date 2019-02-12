@@ -44,13 +44,34 @@ find_library(SDL2_LIBRARY SDL2)
 find_library(SDL2_MIXER_LIBRARY SDL2_mixer)
 find_library(SDL2_TTF_LIBRARY SDL2_ttf)
 target_link_libraries(Main ${SDL2_LIBRARY} ${SDL2_MIXER_LIBRARY} ${SDL2_TTF_LIBRARY})
-if (UNIX) 
-    find_package(Threads)
-    find_library(BZ2_LIBRARY bz2)
-    find_library(FREETYPE_LIBRARY freetype)
-    find_library(PNG_LIBRARY png)
-    find_library(ZLIB_LIBRARY z)
-    target_link_libraries(Main ${CMAKE_DL_LIBS} ${FREETYPE_LIBRARY} ${BZ2_LIBRARY} ${PNG_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} ${ZLIB_LIBRARY}
+if (UNIX)
+        find_package(Threads)
+        find_library(BZ2_LIBRARY bz2)
+        find_library(FLAC_LIBRARY FLAC)
+        find_library(FREETYPE_LIBRARY freetype)
+        find_library(MODPLUG_LIBRARY modplug)
+        find_library(MPG123_LIBRARY mpg123)
+        find_library(OGG_LIBRARY ogg)
+        find_library(OUT123_LIBRARY out123)
+        find_library(PNG_LIBRARY png)
+        find_library(VORBIS_LIBRARY vorbis)
+        find_library(VORBISENC_LIBRARY vorbisenc)
+        find_library(VORBISFILE_LIBRARY vorbisfile)
+        find_library(ZLIB_LIBRARY z)
+        target_link_libraries(Main ${CMAKE_DL_LIBS}
+                ${FREETYPE_LIBRARY}
+                ${BZ2_LIBRARY}
+                ${PNG_LIBRARY}
+                ${CMAKE_THREAD_LIBS_INIT}
+                ${ZLIB_LIBRARY}
+                ${FLAC_LIBRARY}
+                ${MODPLUG_LIBRARY}
+                ${MPG123_LIBRARY}
+                ${OUT123_LIBRARY}
+                ${VORBISENC_LIBRARY}
+                ${VORBISFILE_LIBRARY}
+                ${VORBIS_LIBRARY}
+                ${OGG_LIBRARY}
         /usr/lib/gcc/x86_64-linux-gnu/8/libstdc++fs.a)
 endif()
 # ===END MAIN EXECUTABLE===
