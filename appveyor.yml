@@ -4,26 +4,25 @@ image:
 - Visual Studio 2017
 configuration: Release
 platform: x64
+init:
+- ps: >-
+    if ($isLinux) {
+        git clone https://github.com/jackbister/vcpkg.git ~/vcpkg
+        sh ~/vcpkg/bootstrap-vcpkg.sh
+    }
 install:
 - ps: >-
     if ($isWindows) {
         $Env:VCPKG_ROOT="c:\tools\vcpkg"
         vcpkg install sdl2:x64-windows sdl2-mixer:x64-windows sdl2-ttf:x64-windows asio:x64-windows websocketpp:x64-windows
     } else {
-        $Env:VCPKG_ROOT="$Env:APPVEYOR_BUILD_FOLDER/vcpkg"
-        if (-Not (Test-Path vcpkg)) {
-            git clone https://github.com/Microsoft/vcpkg.git
-            cd vcpkg
-            sh bootstrap-vcpkg.sh
-            cd ..
-        }
-        cd vcpkg
-        ./vcpkg install sdl2:x64-linux sdl2-mixer:x64-linux sdl2-ttf:x64-linux asio:x64-linux websocketpp:x64-linux zlib:x64-linux
-        cd ..
+        $Env:VCPKG_ROOT="/home/appveyor/vcpkg"
+        sudo apt install yasm
+        ~/vcpkg/vcpkg install sdl2:x64-linux sdl2-mixer:x64-linux sdl2-ttf:x64-linux asio:x64-linux websocketpp:x64-linux zlib:x64-linux
     }
 cache:
-- vcpkg
 - c:\tools\vcpkg\installed
+- /home/appveyor/vcpkg/installed
 build_script:
 - ps: >-
     mkdir build
