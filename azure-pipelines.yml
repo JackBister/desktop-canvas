@@ -20,7 +20,7 @@ steps:
       ~/vcpkg install sdl2:x64-windows sdl2-mixer:x64-windows sdl2-ttf:x64-windows asio:x64-windows websocketpp:x64-windows
     } else {
       $Env:VCPKG_ROOT="/home/vsts/vcpkg"
-      apt-get install yasm
+      sudo apt-get install yasm
       ~/vcpkg/vcpkg install sdl2:x64-linux sdl2-mixer:x64-linux sdl2-ttf:x64-linux asio:x64-linux websocketpp:x64-linux zlib:x64-linux
     }
   displayName: setup
