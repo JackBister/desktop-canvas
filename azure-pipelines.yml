@@ -32,7 +32,7 @@ jobs:
         displayName: init
       - pwsh: |
           $Env:VCPKG_ROOT="\vcpkg"
-          \vcpkg\vcpkg.exe" install sdl2:x64-windows sdl2-mixer:x64-windows sdl2-ttf:x64-windows asio:x64-windows websocketpp:x64-windows
+          \vcpkg\vcpkg.exe install sdl2:x64-windows sdl2-mixer:x64-windows sdl2-ttf:x64-windows asio:x64-windows websocketpp:x64-windows
         displayName: setup
       - pwsh: |
           mkdir build
