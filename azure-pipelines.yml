@@ -24,7 +24,7 @@ jobs:
         displayName: build
   - job: Windows
     pool:
-      vmImage: 'Ubuntu-16.04'
+      vmImage: 'vs2017-win2016'
     steps:
       - pwsh: |
           git clone https://github.com/jackbister/vcpkg.git ~/vcpkg
