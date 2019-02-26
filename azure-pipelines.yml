@@ -33,11 +33,13 @@ jobs:
       - pwsh: |
           $Env:VCPKG_ROOT="\vcpkg"
           \vcpkg\vcpkg.exe install sdl2:x64-windows sdl2-mixer:x64-windows sdl2-ttf:x64-windows asio:x64-windows websocketpp:x64-windows
-        displayName: setup
-      - pwsh: |
           mkdir build
           cd build
-          $Env:VCPKG_ROOT="\vcpkg"
           cmake -G "Visual Studio 15 2017 Win64" ..
-          msbuild "desktop-canvas.sln" /m /verbosity:minimal
+          cd ..
+        displayName: setup
+      - task: VSBuild@1
+        inputs:
+          solution: 'build\desktop-canvas.sln'
+          msbuildArchitecture: 'x64'
         displayName: build
