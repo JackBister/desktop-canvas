@@ -48,6 +48,7 @@ LOCAL_SRC_FILES := \
 LOCAL_SHARED_LIBRARIES := SDL2 SDL2_mixer SDL2_ttf
 
 LOCAL_CPP_FEATURES := rtti exceptions
+LOCAL_CPPFLAGS := -std=c++17
 
 LOCAL_LDLIBS += -lGLESv1_CM -lGLESv2 -llog
 
