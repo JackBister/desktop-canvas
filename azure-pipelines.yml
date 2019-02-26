@@ -41,5 +41,5 @@ jobs:
       - task: VSBuild@1
         inputs:
           solution: 'build\desktop-canvas.sln'
-          msbuildArchitecture: 'x64'
+          platform: 'x64'
         displayName: build
