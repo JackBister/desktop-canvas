@@ -28,11 +28,11 @@ jobs:
     steps:
       - pwsh: |
           git clone https://github.com/jackbister/vcpkg.git ~/vcpkg
-          ~/vcpkg/bootstrap-vcpkg.bat
+          C:\Users\vsts\vcpkg\bootstrap-vcpkg.bat
         displayName: init
       - pwsh: |
           $Env:VCPKG_ROOT="C:\Users\vsts\vcpkg"
-          ~/vcpkg/vcpkg install sdl2:x64-windows sdl2-mixer:x64-windows sdl2-ttf:x64-windows asio:x64-windows websocketpp:x64-windows
+          C:\Users\vsts\vcpkg\vcpkg install sdl2:x64-windows sdl2-mixer:x64-windows sdl2-ttf:x64-windows asio:x64-windows websocketpp:x64-windows
         displayName: setup
       - pwsh: |
           mkdir build
