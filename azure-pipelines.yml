@@ -7,7 +7,9 @@ pool:
 steps:
 - pwsh: |
     if ($isLinux) {
-      apt-get install g++-8
+      sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+      sudo apt-get update
+      sudo apt-get install g++-8
     }
     git clone https://github.com/jackbister/vcpkg.git ~/vcpkg
     sh ~/vcpkg/bootstrap-vcpkg.sh
