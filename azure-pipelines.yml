@@ -4,13 +4,11 @@ trigger:
 pool:
   vmImage: 'Ubuntu-16.04'
 
-container: ubuntu:18.04
-
 steps:
-- script: |
-    apt-get install powershell
 - pwsh: |
-    apt-get install g++-8
+    if ($isLinux) {
+      apt-get install g++-8
+    }
     git clone https://github.com/jackbister/vcpkg.git ~/vcpkg
     sh ~/vcpkg/bootstrap-vcpkg.sh
   displayName: init
