@@ -2,6 +2,8 @@
 
 #include "Audio.h"
 
+#include <string>
+
 #include <SDL2/SDL_mixer.h>
 
 class SDLAudio : public Audio
