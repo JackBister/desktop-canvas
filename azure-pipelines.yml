@@ -1,7 +1,7 @@
 jobs:
   - job: Ubuntu
     pool:
-      vmImage: 'Ubuntu-16.04'
+      vmImage: ubuntu-16.04
     steps:
       - pwsh: |
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test
@@ -42,4 +42,43 @@ jobs:
         inputs:
           solution: 'build\desktop-canvas.sln'
           platform: 'x64'
+        displayName: build
+  - job: Android
+    pool:
+      vmImage: ubuntu-16.04
+    steps:
+      - pwsh: |
+          git clone https://github.com/jackbister/vcpkg.git ~/vcpkg
+          sh ~/vcpkg\bootstrap-vcpkg.sh
+        displayName: init
+      - bash: |
+          git clone https://github.com/jackbister/desktop-canvas-android.git ~/desktop-canvas-android
+          cd ~/desktop-canvas-android/app/jni
+          cp -r $(Build.SourcesDirectory) ./desktop-canvas
+
+          curl -o SDL.tar.gz https://libsdl.org/release/SDL2-2.0.9.tar.gz
+          tar -xf SDL.tar.gz
+          mv SDL2-2.0.9 SDL
+
+          curl -o SDL_mixer.tar.gz https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.4.tar.gz
+          tar -xf SDL_mixer.tar.gz
+          mv SDL2_mixer-2.0.4 SDL_mixer
+
+          curl -o SDL_ttf.tar.gz https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-2.0.15.tar.gz
+          tar -xf SDL_ttf.tar.gz
+          mv SDL2_ttf-2.0.15 SDL_ttf
+
+          cd desktop-canvas
+          mkdir include
+          cp -r ../SDL/include include/SDL2
+          cp ../SDL_mixer/SDL_mixer.h include/SDL2/SDL_mixer.h
+          cp ../SDL_ttf/SDL_ttf.h include/SDL2/SDL_ttf.h
+
+          cd ~/vcpkg
+          ./vcpkg install asio:x64-linux websocketpp:x64-linux
+          cp -r installed/x64-linux/include/. ~/desktop-canvas-android/app/jni/desktop-canvas/include
+        displayName: setup
+      - pwsh: |
+          cd ~/desktop-canvas-android
+          ./gradlew buildRelease
         displayName: build
