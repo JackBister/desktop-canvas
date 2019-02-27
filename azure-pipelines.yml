@@ -54,8 +54,6 @@ jobs:
         displayName: init
       - bash: |
           git clone https://github.com/jackbister/desktop-canvas-android.git ~/desktop-canvas-android
-          cd ~/desktop-canvas-android
-          ls
           cd ~/desktop-canvas-android/app/jni
           cp -r $(Build.SourcesDirectory) ./desktop-canvas
 
@@ -83,5 +81,6 @@ jobs:
         displayName: setup
       - bash: |
           cd ~/desktop-canvas-android
-          sudo ./gradlew buildRelease
+          ls
+          sudo ~/desktop-canvas-android/gradlew buildRelease
         displayName: build
