@@ -55,7 +55,7 @@ jobs:
       - bash: |
           git clone https://github.com/jackbister/desktop-canvas-android.git ~/desktop-canvas-android
           cd ~/desktop-canvas-android
-          pwd
+          ls
           cd ~/desktop-canvas-android/app/jni
           cp -r $(Build.SourcesDirectory) ./desktop-canvas
 
