@@ -81,5 +81,5 @@ jobs:
         displayName: setup
       - bash: |
           cd ~/desktop-canvas-android
-          ANDROID_NDK_HOME=/opt/android-sdk-linux/ndk-bundle CC=gcc CXX=g++ ./gradlew buildRelease
+          sudo ./gradlew buildRelease
         displayName: build
