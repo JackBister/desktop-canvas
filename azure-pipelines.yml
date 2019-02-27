@@ -48,7 +48,7 @@ jobs:
       vmImage: ubuntu-16.04
     container: runmymind/docker-android-sdk:ubuntu-standalone
     steps:
-      - pwsh: |
+      - bash: |
           git clone https://github.com/jackbister/vcpkg.git ~/vcpkg
           sh ~/vcpkg\bootstrap-vcpkg.sh
           yes | /opt/android-sdk-linux/tools/bin/sdkmanager --install "build-tools;28.0.2
@@ -80,7 +80,7 @@ jobs:
           ./vcpkg install asio:x64-linux websocketpp:x64-linux
           cp -r installed/x64-linux/include/. ~/desktop-canvas-android/app/jni/desktop-canvas/include
         displayName: setup
-      - pwsh: |
+      - bash: |
           cd ~/desktop-canvas-android
           ANDROID_NDK_HOME=/opt/android-sdk-linux/ndk-bundle CC=gcc CXX=g++ ./gradlew buildRelease
         displayName: build
