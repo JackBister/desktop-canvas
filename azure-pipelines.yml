@@ -82,5 +82,5 @@ jobs:
       - bash: |
           cd ~/desktop-canvas-android
           sudo chmod +x ./gradlew
-          sudo ./gradlew buildRelease
+          ANDROID_HOME=/opt/android-sdk-linux sudo ./gradlew buildRelease
         displayName: build
