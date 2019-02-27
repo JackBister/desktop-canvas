@@ -46,15 +46,11 @@ jobs:
   - job: Android
     pool:
       vmImage: ubuntu-16.04
-    container: runmymind/docker-android-sdk:ubuntu-standalone
+    container: jackbister/android-ndk-build-env:latest
     steps:
       - bash: |
-          su -
-          apt-get update
-          apt-get install gcc g++
           git clone https://github.com/jackbister/vcpkg.git ~/vcpkg
           sh ~/vcpkg/bootstrap-vcpkg.sh
-          yes | /opt/android-sdk-linux/tools/bin/sdkmanager --install "build-tools;28.0.2"
         displayName: init
       - bash: |
           git clone https://github.com/jackbister/desktop-canvas-android.git ~/desktop-canvas-android
