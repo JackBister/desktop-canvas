@@ -49,6 +49,7 @@ jobs:
     container: runmymind/docker-android-sdk:ubuntu-standalone
     steps:
       - bash: |
+          su -
           apt-get update
           apt-get install gcc g++
           git clone https://github.com/jackbister/vcpkg.git ~/vcpkg
