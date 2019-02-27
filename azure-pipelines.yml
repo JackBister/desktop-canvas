@@ -81,6 +81,6 @@ jobs:
         displayName: setup
       - bash: |
           cd ~/desktop-canvas-android
-          ls
-          sudo ~/desktop-canvas-android/gradlew buildRelease
+          sudo chmod +x ./gradlew
+          sudo ./gradlew buildRelease
         displayName: build
