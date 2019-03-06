@@ -82,5 +82,6 @@ jobs:
       - bash: |
           cd ~/desktop-canvas-android
           sudo chmod +x ./gradlew
+          echo sdk.dir=$ANDROID_HOME >> local.properties
           ANDROID_HOME=/opt/android-sdk-linux ANDROID_NDK_HOME=/opt/android-sdk-linux/ndk-bundle CC=gcc CXX=g++ sudo ./gradlew buildRelease
         displayName: build
