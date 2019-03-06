@@ -1,0 +1,87 @@
+jobs:
+  - job: Ubuntu
+    pool:
+      vmImage: ubuntu-16.04
+    steps:
+      - pwsh: |
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+          sudo apt-get update
+          sudo apt-get install g++-8
+          git clone https://github.com/jackbister/vcpkg.git ~/vcpkg
+          sh ~/vcpkg/bootstrap-vcpkg.sh
+        displayName: init
+      - pwsh: |
+          $Env:VCPKG_ROOT="/home/vsts/vcpkg"
+          sudo apt-get install yasm
+          ~/vcpkg/vcpkg install sdl2:x64-linux sdl2-mixer:x64-linux sdl2-ttf:x64-linux asio:x64-linux websocketpp:x64-linux zlib:x64-linux
+        displayName: setup
+      - pwsh: |
+          mkdir build
+          cd build
+          $Env:VCPKG_ROOT="/home/vsts/vcpkg"
+          sh -c 'CXX=g++-8 cmake -G \"Unix Makefiles\" ..'
+          make all
+        displayName: build
+  - job: Windows
+    pool:
+      vmImage: 'vs2017-win2016'
+    steps:
+      - pwsh: |
+          git clone https://github.com/jackbister/vcpkg.git \vcpkg
+          \vcpkg\bootstrap-vcpkg.bat
+        displayName: init
+      - pwsh: |
+          $Env:VCPKG_ROOT="\vcpkg"
+          \vcpkg\vcpkg.exe install sdl2:x64-windows sdl2-mixer:x64-windows sdl2-ttf:x64-windows asio:x64-windows websocketpp:x64-windows
+          mkdir build
+          cd build
+          cmake -G "Visual Studio 15 2017 Win64" ..
+          cd ..
+        displayName: setup
+      - task: VSBuild@1
+        inputs:
+          solution: 'build\desktop-canvas.sln'
+          platform: 'x64'
+        displayName: build
+  - job: Android
+    pool:
+      vmImage: ubuntu-16.04
+    container: jackbister/android-ndk-build-env:latest
+    steps:
+      - bash: |
+          git clone https://github.com/jackbister/vcpkg.git ~/vcpkg
+          sh ~/vcpkg/bootstrap-vcpkg.sh
+        displayName: init
+      - bash: |
+          git clone https://github.com/jackbister/desktop-canvas-android.git ~/desktop-canvas-android
+          cd ~/desktop-canvas-android/app/jni
+          cp -r $(Build.SourcesDirectory) ./desktop-canvas
+
+          curl -o SDL.tar.gz https://libsdl.org/release/SDL2-2.0.9.tar.gz
+          tar -xf SDL.tar.gz
+          mv SDL2-2.0.9 SDL
+
+          curl -o SDL_mixer.tar.gz https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-2.0.4.tar.gz
+          tar -xf SDL_mixer.tar.gz
+          mv SDL2_mixer-2.0.4 SDL_mixer
+
+          curl -o SDL_ttf.tar.gz https://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-2.0.15.tar.gz
+          tar -xf SDL_ttf.tar.gz
+          mv SDL2_ttf-2.0.15 SDL_ttf
+
+          cd desktop-canvas
+          mkdir include
+          cp -r ../SDL/include include/SDL2
+          cp ../SDL_mixer/SDL_mixer.h include/SDL2/SDL_mixer.h
+          cp ../SDL_ttf/SDL_ttf.h include/SDL2/SDL_ttf.h
+
+          cd ~/vcpkg
+          ./vcpkg install asio:x64-linux websocketpp:x64-linux
+          cp -r installed/x64-linux/include/. ~/desktop-canvas-android/app/jni/desktop-canvas/include
+        displayName: setup
+      - bash: |
+          cd ~/desktop-canvas-android
+          sudo chmod +x ./gradlew
+          echo sdk.dir=$ANDROID_HOME >> local.properties
+          ANDROID_HOME=/opt/android-sdk-linux ANDROID_NDK_HOME=/opt/android-sdk-linux/ndk-bundle CC=gcc CXX=g++ sudo ./gradlew buildRelease
+        displayName: build
