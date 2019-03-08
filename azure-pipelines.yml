@@ -7,7 +7,7 @@ jobs:
           sudo add-apt-repository ppa:ubuntu-toolchain-r/test
           sudo apt-get update
           sudo apt-get install g++-8
-          git clone https://github.com/jackbister/vcpkg.git ~/vcpkg
+          git clone https://github.com/microsoft/vcpkg.git ~/vcpkg
           sh ~/vcpkg/bootstrap-vcpkg.sh
         displayName: init
       - pwsh: |
@@ -27,7 +27,7 @@ jobs:
       vmImage: 'vs2017-win2016'
     steps:
       - pwsh: |
-          git clone https://github.com/jackbister/vcpkg.git \vcpkg
+          git clone https://github.com/microsoft/vcpkg.git \vcpkg
           \vcpkg\bootstrap-vcpkg.bat
         displayName: init
       - pwsh: |
@@ -49,7 +49,7 @@ jobs:
     container: jackbister/android-ndk-build-env:latest
     steps:
       - bash: |
-          git clone https://github.com/jackbister/vcpkg.git ~/vcpkg
+          git clone https://github.com/microsoft/vcpkg.git ~/vcpkg
           sh ~/vcpkg/bootstrap-vcpkg.sh
         displayName: init
       - bash: |
