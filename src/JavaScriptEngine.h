@@ -14,6 +14,7 @@ struct SDL_Surface;
 class JavaScriptEngine
 {
   public:
+    virtual void callEventListeners(std::string const & eventName, JSValue evt) = 0;
     virtual void callGlobalFunction(std::string const & functionName) = 0;
     virtual void callGlobalFunction(std::string const & functionName, JSValue parameters) = 0;
     virtual void evalFile(std::string const & filename) = 0;

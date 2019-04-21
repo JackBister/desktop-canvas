@@ -5,6 +5,9 @@
 
 namespace dcanvas::dukUtils
 {
+
+void arraySplice(duk_context *, duk_idx_t arrayIdx, duk_idx_t startIdx, duk_idx_t deleteCount);
+
 template <typename T>
 T * fromCtx(duk_context * ctx)
 {

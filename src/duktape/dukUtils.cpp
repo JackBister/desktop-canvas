@@ -1,5 +1,24 @@
 #include "dukUtils.h"
 
+#include "../Logger/Logger.h"
+
+static auto logger = Logger::get();
+
+void dcanvas::dukUtils::arraySplice(duk_context * ctx, duk_idx_t arrayIdx, duk_idx_t startIdx, duk_idx_t deleteCount)
+{
+	duk_dup(ctx, arrayIdx); // ..., []
+	duk_get_prop_string(ctx, -1, "splice"); // ..., [], splice
+	duk_swap_top(ctx, -2); // ..., splice, []
+	duk_push_int(ctx, startIdx); // ..., splice, [], startIdx
+	duk_push_int(ctx, deleteCount); // ..., splice, [], startIdx, deleteCount
+	auto result = duk_pcall_method(ctx, 2); // ..., retval
+	if (result == DUK_EXEC_ERROR) {
+		duk_safe_to_string(ctx, -1);
+		logger->info("arraySplice error %s", duk_require_string(ctx, -1));
+	}
+	duk_pop(ctx); // ...
+}
+
 void dcanvas::dukUtils::pushToCtx(duk_context * ctx, JSValue const & value)
 {
     auto paramType = value.index();

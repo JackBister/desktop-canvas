@@ -20,6 +20,7 @@ LOCAL_SRC_FILES := \
 	$(LOCAL_SRC_ROOT)/duktape/bindings/canvas/drawImage.cpp \
 	$(LOCAL_SRC_ROOT)/duktape/bindings/canvas/dukCanvas.cpp \
 	$(LOCAL_SRC_ROOT)/duktape/bindings/console/dukConsole.cpp \
+	$(LOCAL_SRC_ROOT)/duktape/bindings/events/dukEvents.cpp \
 	$(LOCAL_SRC_ROOT)/duktape/bindings/navigator/dukNavigator.cpp \
 	$(LOCAL_SRC_ROOT)/duktape/bindings/websocket/dukWebsocket.cpp \
 	$(LOCAL_SRC_ROOT)/duktape/duktape.c \

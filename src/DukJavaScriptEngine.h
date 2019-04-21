@@ -17,6 +17,7 @@ class DukJavaScriptEngine : public JavaScriptEngine
     DukJavaScriptEngine();
     ~DukJavaScriptEngine() override;
 
+    virtual void callEventListeners(std::string const & eventName, JSValue evt) override;
     virtual void callGlobalFunction(std::string const & function_name) override;
     virtual void callGlobalFunction(std::string const & function_name, JSValue parameters) override;
     virtual void evalFile(std::string const & filename) override;

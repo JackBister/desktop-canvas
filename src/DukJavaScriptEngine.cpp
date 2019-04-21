@@ -4,6 +4,7 @@
 #include "duktape/bindings/bitmap/dukBitmap.h"
 #include "duktape/bindings/canvas/dukCanvas.h"
 #include "duktape/bindings/console/dukConsole.h"
+#include "duktape/bindings/events/dukEvents.h"
 #include "duktape/bindings/navigator/dukNavigator.h"
 #include "duktape/bindings/websocket/dukWebsocket.h"
 #include "duktape/dukUtils.h"
@@ -13,9 +14,15 @@
 DukJavaScriptEngine::DukJavaScriptEngine() : ctx(duk_create_heap_default(), duk_destroy_heap)
 {
     dcanvas::initConsole(ctx.get());
+    dcanvas::initEvents(ctx.get());
 }
 
 DukJavaScriptEngine::~DukJavaScriptEngine() {}
+
+void DukJavaScriptEngine::callEventListeners(std::string const & eventName, JSValue evt)
+{
+    dcanvas::callEventListeners(ctx.get(), eventName, evt);
+}
 
 void DukJavaScriptEngine::callGlobalFunction(std::string const & function_name)
 {

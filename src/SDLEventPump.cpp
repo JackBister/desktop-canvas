@@ -40,9 +40,9 @@ bool SDLEventPump::pumpEvents(JavaScriptEngine * into)
                                           {"repeat", key.repeat != 0},
                                           {"shiftKey", (key.keysym.mod & KMOD_SHIFT) != 0}};
                 if (e.type == SDL_KEYDOWN) {
-                    into->callGlobalFunction("onkeydown", keyboardEvent);
+					into->callEventListeners("keydown", keyboardEvent);
                 } else {
-                    into->callGlobalFunction("onkeyup", keyboardEvent);
+					into->callEventListeners("keyup", keyboardEvent);
                 }
             }
         } else if (e.type == SDL_MOUSEBUTTONDOWN) {
@@ -50,7 +50,7 @@ bool SDLEventPump::pumpEvents(JavaScriptEngine * into)
             JSObject mouseEvent = {{"button", (double)(mouse.button - 1)},
                                    {"clientX", (double)mouse.x},
                                    {"clientY", (double)mouse.y}};
-            into->callGlobalFunction("onmousedown", mouseEvent);
+			into->callEventListeners("mousedown", mouseEvent);
         } else if (e.type == SDL_FINGERDOWN || e.type == SDL_FINGERUP) {
             auto finger = e.tfinger;
 
@@ -68,9 +68,9 @@ bool SDLEventPump::pumpEvents(JavaScriptEngine * into)
                                    {"changedTouches", changedTouches}};
 
             if (e.type == SDL_FINGERDOWN) {
-                into->callGlobalFunction("ontouchstart", touchEvent);
+				into->callEventListeners("touchstart", touchEvent);
             } else {
-                into->callGlobalFunction("ontouchend", touchEvent);
+				into->callEventListeners("touchend", touchEvent);
             }
         }
     }
