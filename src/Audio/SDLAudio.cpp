@@ -21,8 +21,8 @@ void SDLAudio::pause()
     }
     auto currentlyPlaying = Mix_GetChunk(channel);
     if (currentlyPlaying == chunk) {
-		Mix_Pause(channel);
-	}
+        Mix_Pause(channel);
+    }
 }
 
 void SDLAudio::play()

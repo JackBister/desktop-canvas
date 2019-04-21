@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "../../duktape.h"
 #include "../../../JSValue.h"
+#include "../../duktape.h"
 
 namespace dcanvas
 {
