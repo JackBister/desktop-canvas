@@ -20,6 +20,7 @@ class DukJavaScriptEngine : public JavaScriptEngine
     virtual void callEventListeners(std::string const & eventName, JSValue evt) override;
     virtual void callGlobalFunction(std::string const & function_name) override;
     virtual void callGlobalFunction(std::string const & function_name, JSValue parameters) override;
+    virtual JSValue callGlobalFunctionWithReturn(std::string const & functionName) override;
     virtual void evalFile(std::string const & filename) override;
     virtual void evalString(std::string const & str) override;
     virtual void initAudio() override;

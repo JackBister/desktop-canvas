@@ -33,12 +33,23 @@ void DukJavaScriptEngine::callGlobalFunction(std::string const & function_name)
 
 void DukJavaScriptEngine::callGlobalFunction(std::string const & function_name, JSValue parameters)
 {
+    printf("p %d\n", duk_get_top(ctx.get()));
     duk_get_global_string(ctx.get(), function_name.c_str());
-
+    printf("f %d\n", duk_get_top(ctx.get()));
     dcanvas::dukUtils::pushToCtx(ctx.get(), parameters);
-
-    duk_pcall(ctx.get(), 1);
+    printf("%d\n", duk_get_top(ctx.get()));
+    duk_call(ctx.get(), 1);
+    //duk_pcall(ctx.get(), 1);
     duk_pop(ctx.get());
+}
+
+JSValue DukJavaScriptEngine::callGlobalFunctionWithReturn(std::string const & functionName)
+{
+    duk_get_global_string(ctx.get(), functionName.c_str());
+    duk_pcall(ctx.get(), 0);
+    auto ret = dcanvas::dukUtils::pullFromCtx(ctx.get());
+    duk_pop(ctx.get());
+	return ret;
 }
 
 void DukJavaScriptEngine::evalFile(std::string const & filename)

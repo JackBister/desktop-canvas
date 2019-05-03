@@ -90,7 +90,6 @@ auto logger = Logger::get();
 
 void initCanvas(duk_context * ctx, CanvasRenderingContext2D * canvas)
 {
-
     duk_get_global_string(ctx, "init");
 
     // Create an object with the property __internalPtr which is a pointer to the CanvasState

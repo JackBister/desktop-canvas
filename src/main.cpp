@@ -154,6 +154,7 @@ int main(int argc, char ** argv)
         if (g_shouldEvalFile) {
             g_lastFileEval = std::chrono::high_resolution_clock::now();
             g_shouldEvalFile = false;
+            auto stashedState = g_jsEngine->callGlobalFunctionWithReturn("stashState");
             // TODO: Exceptions and that stuff
             g_jsEngine = std::make_unique<DukJavaScriptEngine>();
             g_jsEngine->evalFile(g_options.filename.u8string().c_str());
@@ -163,6 +164,8 @@ int main(int argc, char ** argv)
             g_jsEngine->initNavigator(navigator);
             g_jsEngine->initWebsocket();
             g_jsEngine->initCanvas(canvas);
+
+			g_jsEngine->callGlobalFunction("loadState", stashedState);
         }
 
         g_jsEngine->preTick();

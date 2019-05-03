@@ -1,5 +1,7 @@
 #include "dukUtils.h"
 
+#include <stdexcept>
+
 #include "../Logger/Logger.h"
 
 static auto logger = Logger::get();
@@ -18,6 +20,43 @@ void dcanvas::dukUtils::arraySplice(duk_context * ctx, duk_idx_t arrayIdx, duk_i
         logger->info("arraySplice error %s", duk_require_string(ctx, -1));
     }
     duk_pop(ctx); // ...
+}
+
+JSValue dcanvas::dukUtils::pullFromCtx(duk_context * ctx)
+{
+    if (duk_is_array(ctx, -1)) {
+        auto len = duk_get_length(ctx, -1);
+        std::vector<JSValue> arr;
+        for (auto i = 0; i < len; ++i) {
+            duk_get_prop_index(ctx, -1, i);
+            arr.push_back(pullFromCtx(ctx));
+            duk_pop(ctx);
+        }
+        return arr;
+    } else if (duk_is_boolean(ctx, -1)) {
+        return (bool)duk_get_boolean(ctx, -1);
+    } else if (duk_is_null(ctx, -1)) {
+        return nullptr;
+    } else if (duk_is_number(ctx, -1)) {
+        return duk_get_number(ctx, -1);
+    } else if (duk_is_object(ctx, -1)) {
+        duk_enum(ctx, -1, 0);
+        JSObject obj;
+        while (duk_next(ctx, -1, 1)) {
+            auto key = duk_to_string(ctx, -2);
+            auto value = pullFromCtx(ctx);
+            obj.push_back(std::make_pair(key, value));
+            duk_pop_2(ctx);
+        }
+        duk_pop(ctx);
+        return obj;
+    } else if (duk_is_string(ctx, -1)) {
+        auto str = duk_get_string(ctx, -1);
+        return std::string(str);
+    } else {
+        logger->info("Unhandled JSValue type at top of stack %d", duk_get_type(ctx, -1));
+        throw std::runtime_error("Unhandled JSValue type at top of stack");
+    }
 }
 
 void dcanvas::dukUtils::pushToCtx(duk_context * ctx, JSValue const & value)
@@ -43,5 +82,7 @@ void dcanvas::dukUtils::pushToCtx(duk_context * ctx, JSValue const & value)
             pushToCtx(ctx, arr[i]);
             duk_put_prop_index(ctx, arrIdx, i);
         }
-    }
+    } else if (paramType == JSValue::Type::NULLPTR) {
+        duk_push_null(ctx);
+	}
 }

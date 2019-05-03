@@ -17,6 +17,8 @@ class JavaScriptEngine
     virtual void callEventListeners(std::string const & eventName, JSValue evt) = 0;
     virtual void callGlobalFunction(std::string const & functionName) = 0;
     virtual void callGlobalFunction(std::string const & functionName, JSValue parameters) = 0;
+	// TODO: Maybe the above functions should return optional<JSValue>
+    virtual JSValue callGlobalFunctionWithReturn(std::string const & functionName) = 0;
     virtual void evalFile(std::string const & filename) = 0;
     virtual void evalString(std::string const & str) = 0;
     // TODO: This is badly abstracted

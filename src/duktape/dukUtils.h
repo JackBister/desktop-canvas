@@ -22,5 +22,6 @@ T * fromCtx(duk_context * ctx)
     return state;
 }
 
+JSValue pullFromCtx(duk_context *);
 void pushToCtx(duk_context *, JSValue const &);
 };
