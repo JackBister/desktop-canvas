@@ -83,6 +83,7 @@ void dcanvas::callEventListeners(duk_context * ctx, std::string const & eventNam
         ctx, -1,
         eventName.c_str()); // globalStash, __eventHandlers, (undefined or array of handlers)
     if (duk_is_undefined(ctx, -1)) {
+        duk_pop_3(ctx);
         return;
     }
     // globalStash, __eventHandlers, array of handlers
