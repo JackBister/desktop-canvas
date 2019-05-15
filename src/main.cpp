@@ -23,6 +23,7 @@
 */
 
 #include "Canvas/SDLCanvasRenderingContext2D.h"
+#include "Canvas/SDLWindowCanvas.h"
 #include "DukJavaScriptEngine.h"
 #include "Input/SDLKeyToDOMKey.h"
 #include "JavaScriptEngine.h"
@@ -106,7 +107,8 @@ int main(int argc, char ** argv)
     auto renderer = windowAndRenderer.second;
     auto windowSurface = SDL_GetWindowSurface(windowAndRenderer.first);
 
-    CanvasRenderingContext2D * canvas = new SDLCanvasRenderingContext2D(renderer, windowSurface);
+    auto canvas = new SDLWindowCanvas(windowAndRenderer.first, renderer);
+    auto context = canvas->getContext();
 
     // TODO: Configurable
     SDL_RenderSetLogicalSize(renderer, 400, 225);
@@ -140,10 +142,10 @@ int main(int argc, char ** argv)
     g_jsEngine->evalFile(g_options.filename.u8string().c_str());
 
     g_jsEngine->initAudio();
-    g_jsEngine->initBitmap(canvas);
+    g_jsEngine->initBitmap(context);
     g_jsEngine->initNavigator(navigator);
     g_jsEngine->initWebsocket();
-    g_jsEngine->initCanvas(canvas);
+    g_jsEngine->initCanvas(context, renderer);
 
     for (;;) {
         bool shouldQuit = g_eventPump->pumpEvents(g_jsEngine.get());
@@ -160,12 +162,12 @@ int main(int argc, char ** argv)
             g_jsEngine->evalFile(g_options.filename.u8string().c_str());
 
             g_jsEngine->initAudio();
-            g_jsEngine->initBitmap(canvas);
+            g_jsEngine->initBitmap(context);
             g_jsEngine->initNavigator(navigator);
             g_jsEngine->initWebsocket();
-            g_jsEngine->initCanvas(canvas);
+            g_jsEngine->initCanvas(context, renderer);
 
-			g_jsEngine->callGlobalFunction("loadState", stashedState);
+            g_jsEngine->callGlobalFunction("loadState", stashedState);
         }
 
         g_jsEngine->preTick();

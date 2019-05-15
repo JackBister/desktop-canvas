@@ -30,7 +30,11 @@ static int audioConstructor(duk_context * ctx)
     auto ret = new SDLAudio(src);
 
     duk_push_object(ctx);
-
+    duk_push_string(ctx, "\xFF"
+                         "\xFF"
+                         "internalClassName");
+    duk_push_string(ctx, "Audio");
+    duk_def_prop(ctx, -3, DUK_DEFPROP_HAVE_VALUE);
     duk_push_pointer(ctx, ret);
     duk_put_prop_string(ctx, -2,
                         "\xFF"

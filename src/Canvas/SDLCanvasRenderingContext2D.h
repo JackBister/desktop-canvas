@@ -11,10 +11,13 @@
 
 #include "SDLBitmap.h"
 
+class Canvas;
+
 class SDLCanvasRenderingContext2D : public CanvasRenderingContext2D
 {
   public:
-    SDLCanvasRenderingContext2D(SDL_Renderer * renderer, SDL_Surface * surface);
+    SDLCanvasRenderingContext2D(Canvas * canvas, SDL_Renderer * renderer,
+                                SDL_Texture * renderTarget);
 
     virtual SDLBitmap * createBitmap(void * data, size_t size) override;
 
@@ -33,13 +36,16 @@ class SDLCanvasRenderingContext2D : public CanvasRenderingContext2D
     virtual std::string const & getFillStyle() override { return fillStyle; }
     virtual void setFillStyle(std::string const & val) override { fillStyle = val; }
 
+    virtual Canvas * getCanvas() override { return canvas; }
+
   private:
     struct FontDestroyer {
         void operator()(TTF_Font * font) { TTF_CloseFont(font); }
     };
 
+    Canvas * canvas;
     SDL_Renderer * renderer;
-    SDL_Surface * surface;
+    SDL_Texture * renderTarget;
 
     std::unique_ptr<TTF_Font, FontDestroyer> sdlFont;
 
@@ -48,4 +54,5 @@ class SDLCanvasRenderingContext2D : public CanvasRenderingContext2D
     std::string strokeStyle = "#000000";
 
     std::pair<int, std::string> parseFont(std::string const &);
+    void setRenderTargetIfNeeded();
 };

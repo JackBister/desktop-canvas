@@ -2,7 +2,9 @@
 
 #include <string>
 
-#include "Bitmap.h"
+#include "SDLBitmap.h"
+
+class Canvas;
 
 class CanvasRenderingContext2D
 {
@@ -25,6 +27,8 @@ class CanvasRenderingContext2D
 
     virtual std::string const & getFillStyle() = 0;
     virtual void setFillStyle(std::string const & val) = 0;
+
+    virtual Canvas * getCanvas() = 0;
 
     virtual ~CanvasRenderingContext2D();
 };

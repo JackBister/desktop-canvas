@@ -33,13 +33,10 @@ void DukJavaScriptEngine::callGlobalFunction(std::string const & function_name)
 
 void DukJavaScriptEngine::callGlobalFunction(std::string const & function_name, JSValue parameters)
 {
-    printf("p %d\n", duk_get_top(ctx.get()));
     duk_get_global_string(ctx.get(), function_name.c_str());
-    printf("f %d\n", duk_get_top(ctx.get()));
     dcanvas::dukUtils::pushToCtx(ctx.get(), parameters);
-    printf("%d\n", duk_get_top(ctx.get()));
     duk_call(ctx.get(), 1);
-    //duk_pcall(ctx.get(), 1);
+    // duk_pcall(ctx.get(), 1);
     duk_pop(ctx.get());
 }
 
@@ -49,7 +46,7 @@ JSValue DukJavaScriptEngine::callGlobalFunctionWithReturn(std::string const & fu
     duk_pcall(ctx.get(), 0);
     auto ret = dcanvas::dukUtils::pullFromCtx(ctx.get());
     duk_pop(ctx.get());
-	return ret;
+    return ret;
 }
 
 void DukJavaScriptEngine::evalFile(std::string const & filename)
@@ -73,9 +70,9 @@ void DukJavaScriptEngine::initBitmap(CanvasRenderingContext2D * canvas)
     dcanvas::initBitmap(ctx.get(), canvas);
 }
 
-void DukJavaScriptEngine::initCanvas(CanvasRenderingContext2D * canvas)
+void DukJavaScriptEngine::initCanvas(CanvasRenderingContext2D * canvas, SDL_Renderer * renderer)
 {
-    dcanvas::initCanvas(ctx.get(), canvas);
+    dcanvas::initCanvas(ctx.get(), canvas, renderer);
 }
 
 void DukJavaScriptEngine::initNavigator(Navigator * navigator)

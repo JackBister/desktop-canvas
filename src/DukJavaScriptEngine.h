@@ -25,7 +25,7 @@ class DukJavaScriptEngine : public JavaScriptEngine
     virtual void evalString(std::string const & str) override;
     virtual void initAudio() override;
     virtual void initBitmap(CanvasRenderingContext2D *) override;
-    virtual void initCanvas(CanvasRenderingContext2D *) override;
+    virtual void initCanvas(CanvasRenderingContext2D *, SDL_Renderer *) override;
     virtual void initNavigator(Navigator *) override;
     virtual void initWebsocket() override;
     virtual void preTick() override;

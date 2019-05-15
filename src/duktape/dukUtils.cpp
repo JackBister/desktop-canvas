@@ -84,5 +84,5 @@ void dcanvas::dukUtils::pushToCtx(duk_context * ctx, JSValue const & value)
         }
     } else if (paramType == JSValue::Type::NULLPTR) {
         duk_push_null(ctx);
-	}
+    }
 }

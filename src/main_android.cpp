@@ -52,7 +52,7 @@ int main(int argc, char * argv[])
         __android_log_print(ANDROID_LOG_INFO, "dcanvas", "Mix_OpenAudio error %s", SDL_GetError());
     }
 
-    CanvasRenderingContext2D * canvas = new SDLCanvasRenderingContext2D(renderer, surface);
+    CanvasRenderingContext2D * canvas = new SDLCanvasRenderingContext2D(renderer, nullptr);
 
     auto backbuffer = SDL_CreateTexture(renderer, SDL_GetWindowPixelFormat(window),
                                         SDL_TEXTUREACCESS_TARGET, 400, 225);
@@ -70,7 +70,7 @@ int main(int argc, char * argv[])
     g_jsEngine->initAudio();
     g_jsEngine->initBitmap(canvas);
     g_jsEngine->initWebsocket();
-    g_jsEngine->initCanvas(canvas);
+    g_jsEngine->initCanvas(canvas, renderer);
 
     for (;;) {
         SDL_SetRenderTarget(renderer, backbuffer);
