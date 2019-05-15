@@ -14,7 +14,10 @@ LOCAL_SRC_FILES := \
 	$(LOCAL_SRC_ROOT)/Canvas/Bitmap.cpp \
 	$(LOCAL_SRC_ROOT)/Canvas/CanvasRenderingContext2D.cpp \
 	$(LOCAL_SRC_ROOT)/Canvas/SDLBitmap.cpp \
+	$(LOCAL_SRC_ROOT)/Canvas/Canvas.cpp \
 	$(LOCAL_SRC_ROOT)/Canvas/SDLCanvasRenderingContext2D.cpp \
+	$(LOCAL_SRC_ROOT)/Canvas/SDLOffscreenCanvas.cpp \
+	$(LOCAL_SRC_ROOT)/Canvas/SDLWindowCanvas.cpp \
 	$(LOCAL_SRC_ROOT)/duktape/bindings/audio/dukAudio.cpp \
 	$(LOCAL_SRC_ROOT)/duktape/bindings/bitmap/dukBitmap.cpp \
 	$(LOCAL_SRC_ROOT)/duktape/bindings/canvas/drawImage.cpp \
