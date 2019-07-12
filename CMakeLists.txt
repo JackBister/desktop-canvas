@@ -17,6 +17,8 @@ add_executable(Main ${SOURCES})
 file(GLOB_RECURSE ANDROID_SOURCES src/*_android.*)
 set_source_files_properties(${ANDROID_SOURCES} PROPERTIES HEADER_FILE_ONLY TRUE)
 
+set_property(TARGET Main PROPERTY CXX_STANDARD 17)
+
 # Set unicode charset in VS
 if (MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /UMBCS /D_UNICODE /DUNICODE /STD /std:c++17")
@@ -40,7 +42,7 @@ target_include_directories(Main PUBLIC src)
 target_include_directories(Main SYSTEM PUBLIC ${ASIO_INCLUDE_DIR} ${SDL2_INCLUDE_DIR} ${SDL2_MIXER_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR} ${WEBSOCKETPP_INCLUDE_DIR})
 
 # Links
-find_library(SDL2_LIBRARY SDL2)
+find_library(SDL2_LIBRARY SDL2d)
 find_library(SDL2_MIXER_LIBRARY SDL2_mixer)
 find_library(SDL2_TTF_LIBRARY SDL2_ttf)
 target_link_libraries(Main ${SDL2_LIBRARY} ${SDL2_MIXER_LIBRARY} ${SDL2_TTF_LIBRARY})

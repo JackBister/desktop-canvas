@@ -11747,7 +11747,7 @@ DUK_INTERNAL DUK_COLD void duk_default_fatal_handler(void *udata, const char *ms
 	DUK_ABORT();
 #endif
 
-	DUK_D(DUK_DPRINT("fatal error handler returned, enter forever loop"));
+ 	DUK_D(DUK_DPRINT("fatal error handler returned, enter forever loop"));
 	for (;;) {
 		/* Loop forever to ensure we don't return. */
 	}

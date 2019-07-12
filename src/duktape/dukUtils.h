@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include "../JSValue.h"
 #include "duktape.h"
 

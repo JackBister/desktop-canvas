@@ -172,6 +172,7 @@ int main(int argc, char ** argv)
 
         g_jsEngine->preTick();
         g_jsEngine->callGlobalFunction("tick");
+        g_jsEngine->postTick();
 
         SDL_RenderPresent(renderer);
 

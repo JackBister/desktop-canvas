@@ -29,6 +29,13 @@ class SDLCanvasRenderingContext2D : public CanvasRenderingContext2D
     virtual void fillRect(int x, int y, int width, int height) override;
 
     virtual void fillText(std::string const & text, int x, int y) override;
+    virtual TextMetrics measureText(std::string const & text) override;
+
+    virtual std::string const & getTextAlign() override;
+    virtual void setTextAlign(std::string const & val) override;
+
+    virtual std::string const & getTextBaseline() override;
+    virtual void setTextBaseline(std::string const & val) override;
 
     virtual std::string const & getFont() override;
     virtual void setFont(std::string const & val) override;
@@ -43,6 +50,16 @@ class SDLCanvasRenderingContext2D : public CanvasRenderingContext2D
         void operator()(TTF_Font * font) { TTF_CloseFont(font); }
     };
 
+	enum class TextAlign {
+		CENTER,
+		LEFT
+	};
+
+	enum class TextBaseline {
+		MIDDLE,
+		TOP
+	};
+
     Canvas * canvas;
     SDL_Renderer * renderer;
     SDL_Texture * renderTarget;
@@ -52,6 +69,9 @@ class SDLCanvasRenderingContext2D : public CanvasRenderingContext2D
     std::string fillStyle = "#000000";
     std::string font = "";
     std::string strokeStyle = "#000000";
+
+	TextAlign textAlign = TextAlign::LEFT;
+	TextBaseline textBaseline = TextBaseline::TOP;
 
     std::pair<int, std::string> parseFont(std::string const &);
     void setRenderTargetIfNeeded();

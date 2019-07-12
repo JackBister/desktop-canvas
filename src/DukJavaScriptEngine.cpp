@@ -1,5 +1,6 @@
 #include "DukJavaScriptEngine.h"
 
+#include "duktape/bindings/animationframe/dukAnimationFrame.h"
 #include "duktape/bindings/audio/dukAudio.h"
 #include "duktape/bindings/bitmap/dukBitmap.h"
 #include "duktape/bindings/canvas/dukCanvas.h"
@@ -13,7 +14,8 @@
 
 DukJavaScriptEngine::DukJavaScriptEngine() : ctx(duk_create_heap_default(), duk_destroy_heap)
 {
-    dcanvas::initConsole(ctx.get());
+    dcanvas::initAnimationFrame(ctx.get());
+	dcanvas::initConsole(ctx.get());
     dcanvas::initEvents(ctx.get());
 }
 
@@ -35,8 +37,7 @@ void DukJavaScriptEngine::callGlobalFunction(std::string const & function_name, 
 {
     duk_get_global_string(ctx.get(), function_name.c_str());
     dcanvas::dukUtils::pushToCtx(ctx.get(), parameters);
-    duk_call(ctx.get(), 1);
-    // duk_pcall(ctx.get(), 1);
+    duk_pcall(ctx.get(), 1);
     duk_pop(ctx.get());
 }
 
@@ -91,4 +92,9 @@ void DukJavaScriptEngine::preTick()
         auto messageAndHandler = webSocketMessageQueue.pop();
         messageAndHandler.first(ctx.get(), messageAndHandler.second);
     }
+}
+
+void DukJavaScriptEngine::postTick()
+{
+    dcanvas::executeAnimationFrameFunctions(ctx.get());
 }

@@ -29,6 +29,7 @@ class JavaScriptEngine
     virtual void initWebsocket() = 0;
 
     virtual void preTick() = 0;
+    virtual void postTick() = 0;
 
     virtual ~JavaScriptEngine();
 };

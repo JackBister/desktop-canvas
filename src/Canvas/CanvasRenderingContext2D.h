@@ -3,6 +3,7 @@
 #include <string>
 
 #include "SDLBitmap.h"
+#include "TextMetrics.h"
 
 class Canvas;
 
@@ -21,9 +22,16 @@ class CanvasRenderingContext2D
     virtual void fillRect(int x, int y, int width, int height) = 0;
 
     virtual void fillText(std::string const & text, int x, int y) = 0;
+	virtual TextMetrics measureText(std::string const& text) = 0;
 
     virtual std::string const & getFont() = 0;
     virtual void setFont(std::string const & val) = 0;
+
+	virtual std::string const & getTextAlign() = 0;
+    virtual void setTextAlign(std::string const & val) = 0;
+
+	virtual std::string const & getTextBaseline() = 0;
+    virtual void setTextBaseline(std::string const & val) = 0;
 
     virtual std::string const & getFillStyle() = 0;
     virtual void setFillStyle(std::string const & val) = 0;

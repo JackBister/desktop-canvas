@@ -7,6 +7,33 @@
 
 static auto logger = Logger::get();
 
+struct Color
+{
+    uint8_t r, g, b;
+};
+
+static Color parseColor(std::string const& color) {
+    Color ret;
+    if (color.size() == 7) {
+        ret.r = dcanvas::hexToByte(color.substr(1, 2));
+        ret.g = dcanvas::hexToByte(color.substr(3, 2));
+        ret.b = dcanvas::hexToByte(color.substr(5, 2));
+    } else if (color.size() == 4) {
+        auto r = dcanvas::hexCharToByte(color[1]);
+        auto g = dcanvas::hexCharToByte(color[2]);
+        auto b = dcanvas::hexCharToByte(color[3]);
+        ret.r = r | r << 4;
+        ret.g = g | g << 4;
+        ret.b = b | b << 4;
+    } else {
+        logger->info("parseColor: Unable to parse color string '%s', defaulting to #D500FF", color.c_str());
+        ret.r = 0xD5;
+        ret.g = 0;
+        ret.b = 0xFF;
+    }
+    return ret;
+}
+
 SDLCanvasRenderingContext2D::SDLCanvasRenderingContext2D(Canvas * canvas, SDL_Renderer * renderer,
                                                          SDL_Texture * renderTarget)
     : canvas(canvas), renderer(renderer), renderTarget(renderTarget), sdlFont(nullptr)
@@ -82,9 +109,7 @@ void SDLCanvasRenderingContext2D::drawImage(Bitmap * img, int sx, int sy, int sW
 void SDLCanvasRenderingContext2D::fillRect(int x, int y, int width, int height)
 {
     setRenderTargetIfNeeded();
-    auto r = dcanvas::hexToByte(fillStyle.substr(1, 2));
-    auto g = dcanvas::hexToByte(fillStyle.substr(3, 2));
-    auto b = dcanvas::hexToByte(fillStyle.substr(5, 2));
+    Color fillColor = parseColor(fillStyle);
 
     SDL_Rect rect;
     rect.x = x;
@@ -92,22 +117,30 @@ void SDLCanvasRenderingContext2D::fillRect(int x, int y, int width, int height)
     rect.w = width;
     rect.h = height;
 
-    SDL_SetRenderDrawColor(renderer, r, g, b, 0xFF);
+    SDL_SetRenderDrawColor(renderer, fillColor.r, fillColor.g, fillColor.b, 0xFF);
     SDL_RenderFillRect(renderer, &rect);
 }
 
 void SDLCanvasRenderingContext2D::fillText(std::string const & text, int x, int y)
 {
     setRenderTargetIfNeeded();
-    auto r = dcanvas::hexToByte(fillStyle.substr(1, 2));
-    auto g = dcanvas::hexToByte(fillStyle.substr(3, 2));
-    auto b = dcanvas::hexToByte(fillStyle.substr(5, 2));
+    Color fillColor = parseColor(fillStyle);
 
     SDL_Color fg;
-    fg.r = r;
-    fg.g = g;
-    fg.b = b;
+    fg.r = fillColor.r;
+    fg.g = fillColor.g;
+    fg.b = fillColor.b;
     fg.a = 0xFF;
+
+	int width, height;
+	TTF_SizeUTF8(sdlFont.get(), text.c_str(), &width, &height);
+	if (textAlign == TextAlign::CENTER) {
+        x -= width / 2;
+	}
+
+	if (textBaseline == TextBaseline::MIDDLE) {
+		y -= height / 2;
+	}
 
     auto surf = TTF_RenderUTF8_Solid(sdlFont.get(), text.c_str(), fg);
     if (!surf) {
@@ -125,8 +158,65 @@ void SDLCanvasRenderingContext2D::fillText(std::string const & text, int x, int 
         logger->info("RenderCopy failed: %s", SDL_GetError());
     }
 
-    SDL_DestroyTexture(tex);
-    // SDL_FreeSurface(surf);
+	SDL_DestroyTexture(tex);
+	SDL_FreeSurface(surf);
+}
+
+TextMetrics SDLCanvasRenderingContext2D::measureText(std::string const & text)
+{
+    int width, height;
+    TTF_SizeText(sdlFont.get(), text.c_str(), &width, &height);
+    return TextMetrics(width);
+}
+
+std::string const & SDLCanvasRenderingContext2D::getTextAlign()
+{
+    switch (textAlign) {
+    case TextAlign::CENTER:
+        return "center";
+    case TextAlign::LEFT:
+        return "left";
+	default:
+		logger->info("Unknown textAlign %d when getting, defaulting to left", textAlign);
+		return "left";
+	}
+}
+
+void SDLCanvasRenderingContext2D::setTextAlign(std::string const & val)
+{
+    if (val == "center") {
+        textAlign = TextAlign::CENTER;
+    } else if (val == "left") {
+        textAlign = TextAlign::LEFT;
+	} else {
+		logger->info("Unknown textAlign '%s' when setting, defaulting to left", val.c_str());
+        textAlign = TextAlign::LEFT;
+	}
+}
+
+std::string const & SDLCanvasRenderingContext2D::getTextBaseline()
+{
+	switch (textBaseline) {
+	case TextBaseline::MIDDLE:
+		return "middle";
+	case TextBaseline::TOP:
+		return "top";
+	default:
+		logger->info("Unknown textBaseline %d when getting, defaulting to top", textBaseline);
+		return "top";
+	}
+}
+
+void SDLCanvasRenderingContext2D::setTextBaseline(std::string const & val)
+{
+	if (val == "middle") {
+		textBaseline = TextBaseline::MIDDLE;
+	} else if (val == "top") {
+		textBaseline = TextBaseline::TOP;
+	} else {
+		logger->info("Unknown textBaseline '%s' when setting, defaulting to top", val.c_str());
+		textBaseline = TextBaseline::TOP;
+	}
 }
 
 std::string const & SDLCanvasRenderingContext2D::getFont()
@@ -140,6 +230,9 @@ void SDLCanvasRenderingContext2D::setFont(std::string const & val)
 
     auto sizeAndFont = parseFont(val);
     sdlFont.reset(TTF_OpenFont(sizeAndFont.second.c_str(), sizeAndFont.first));
+    if (!sdlFont) {
+        logger->info("Error loading font: %s", TTF_GetError());
+    }
 }
 
 std::pair<int, std::string> SDLCanvasRenderingContext2D::parseFont(std::string const & fontString)
@@ -148,7 +241,7 @@ std::pair<int, std::string> SDLCanvasRenderingContext2D::parseFont(std::string c
     auto sizeString = fontString.substr(0, pIndex);
     auto size = std::stoi(sizeString);
 
-    auto spaceIndex = fontString.find(' ');
+    auto spaceIndex = fontString.find_last_of(' ');
     auto fontPath = fontString.substr(spaceIndex + 1);
 
     return {size, fontPath};

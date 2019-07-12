@@ -42,6 +42,7 @@ static int removeEventListener(duk_context * ctx)
     duk_get_prop_string(ctx, -1, eventName.c_str()); // eventName, fn, globalStash, __eventHandlers,
                                                      // (undefined or array of handlers)
     if (duk_is_undefined(ctx, -1)) {
+        duk_pop_n(ctx, 5);
         return 0;
     }
     // eventName, fn, globalStash, __eventHandlers, array of handlers
@@ -57,6 +58,7 @@ static int removeEventListener(duk_context * ctx)
         }
         duk_pop(ctx);
     }
+    duk_pop_3(ctx);
     return 0;
 }
 

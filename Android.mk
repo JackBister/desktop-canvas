@@ -18,6 +18,7 @@ LOCAL_SRC_FILES := \
 	$(LOCAL_SRC_ROOT)/Canvas/SDLCanvasRenderingContext2D.cpp \
 	$(LOCAL_SRC_ROOT)/Canvas/SDLOffscreenCanvas.cpp \
 	$(LOCAL_SRC_ROOT)/Canvas/SDLWindowCanvas.cpp \
+	$(LOCAL_SRC_ROOT)/duktape/bindings/animationframe/dukAnimationFrame.cpp \
 	$(LOCAL_SRC_ROOT)/duktape/bindings/audio/dukAudio.cpp \
 	$(LOCAL_SRC_ROOT)/duktape/bindings/bitmap/dukBitmap.cpp \
 	$(LOCAL_SRC_ROOT)/duktape/bindings/canvas/drawImage.cpp \

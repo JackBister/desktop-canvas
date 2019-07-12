@@ -29,6 +29,7 @@ class DukJavaScriptEngine : public JavaScriptEngine
     virtual void initNavigator(Navigator *) override;
     virtual void initWebsocket() override;
     virtual void preTick() override;
+    virtual void postTick() override;
 
   private:
     using DukDestroyer = void (*)(duk_context *);

@@ -1,6 +1,6 @@
 #include "hexToByte.h"
 
-static uint8_t hexCharToByte(char hex)
+uint8_t dcanvas::hexCharToByte(char hex)
 {
     if (hex > 'A' && hex <= 'F') {
         return 10 + hex - 'A';
@@ -13,5 +13,5 @@ static uint8_t hexCharToByte(char hex)
 
 uint8_t dcanvas::hexToByte(std::string const & hexString)
 {
-    return hexCharToByte(hexString[0]) << 4 | hexCharToByte(hexString[1]);
+    return dcanvas::hexCharToByte(hexString[0]) << 4 | dcanvas::hexCharToByte(hexString[1]);
 }

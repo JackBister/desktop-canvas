@@ -14,7 +14,10 @@ class SDLOffscreenCanvas : public Canvas
     SDLOffscreenCanvas(SDL_Renderer * renderer, int width, int height);
 
     virtual int getHeight() override;
+    virtual void setHeight(int height) override;
+
     virtual int getWidth() override;
+    virtual void setWidth(int width) override;
 
     virtual CanvasRenderingContext2D * getContext() override;
 
@@ -23,5 +26,6 @@ class SDLOffscreenCanvas : public Canvas
   private:
     int width, height;
     CanvasRenderingContext2D * context;
+    SDL_Renderer * renderer;
     SDL_Texture * texture;
 };

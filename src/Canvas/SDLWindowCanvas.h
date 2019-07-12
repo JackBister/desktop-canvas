@@ -11,7 +11,10 @@ class SDLWindowCanvas : public Canvas
     SDLWindowCanvas(SDL_Window *, SDL_Renderer *);
 
     virtual int getHeight() override;
+    virtual void setHeight(int height) override;
+
     virtual int getWidth() override;
+    virtual void setWidth(int width) override;
 
     virtual CanvasRenderingContext2D * getContext() override;
 

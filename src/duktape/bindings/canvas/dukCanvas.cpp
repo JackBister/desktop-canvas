@@ -47,12 +47,26 @@ static int getHeight(duk_context * ctx)
     return 1;
 }
 
+static int setHeight(duk_context * ctx)
+{
+    auto state = dcanvas::dukUtils::fromCtx<Canvas>(ctx);
+    state->setHeight(duk_require_number(ctx, -1));
+    return 0;
+}
+
 static int getWidth(duk_context * ctx)
 {
     auto state = dcanvas::dukUtils::fromCtx<Canvas>(ctx);
     auto width = state->getWidth();
     duk_push_number(ctx, width);
     return 1;
+}
+
+static int setWidth(duk_context * ctx)
+{
+    auto state = dcanvas::dukUtils::fromCtx<Canvas>(ctx);
+    state->setWidth(duk_require_number(ctx, -1));
+    return 0;
 }
 
 static int getContext(duk_context * ctx)
@@ -76,8 +90,8 @@ static void pushCanvasToCtx(duk_context * ctx, Canvas * canvas)
     duk_push_pointer(ctx, canvas);
     duk_def_prop(ctx, -3, DUK_DEFPROP_HAVE_VALUE);
 
-    defineProp(ctx, "height", getHeight);
-    defineProp(ctx, "width", getWidth);
+    defineProp(ctx, "height", getHeight, setHeight);
+    defineProp(ctx, "width", getWidth, setWidth);
     defineMethod(ctx, "getContext", getContext, 1);
 }
 
@@ -138,7 +152,7 @@ static int getFont(duk_context * ctx)
 {
     auto state = dcanvas::dukUtils::fromCtx<CanvasRenderingContext2D>(ctx);
 
-    duk_push_string(ctx, state->getFillStyle().c_str());
+    duk_push_string(ctx, state->getFont().c_str());
     return 1;
 }
 
@@ -148,6 +162,55 @@ static int setFont(duk_context * ctx)
 
     state->setFont(std::string(duk_require_string(ctx, -1)));
     return 1;
+}
+
+static int measureText(duk_context * ctx)
+{
+    auto state = dcanvas::dukUtils::fromCtx<CanvasRenderingContext2D>(ctx);
+    auto metrics = state->measureText(std::string(duk_require_string(ctx, -1)));
+
+    duk_push_object(ctx);
+    duk_push_string(ctx, "width");
+    duk_push_number(ctx, metrics.width);
+    duk_def_prop(ctx, -3, DUK_DEFPROP_HAVE_VALUE);
+
+    return 1;
+}
+
+static int getTextAlign(duk_context * ctx)
+{
+    auto state = dcanvas::dukUtils::fromCtx<CanvasRenderingContext2D>(ctx);
+
+    auto textAlign = state->getTextAlign();
+    duk_push_string(ctx, textAlign.c_str());
+    return 1;
+}
+
+static int setTextAlign(duk_context * ctx)
+{
+    auto state = dcanvas::dukUtils::fromCtx<CanvasRenderingContext2D>(ctx);
+
+	std::string textAlign(duk_require_string(ctx, -1));
+    state->setTextAlign(textAlign);
+    return 0;
+}
+
+static int getTextBaseline(duk_context* ctx)
+{
+	auto state = dcanvas::dukUtils::fromCtx<CanvasRenderingContext2D>(ctx);
+
+	auto textBaseline = state->getTextBaseline();
+	duk_push_string(ctx, textBaseline.c_str());
+	return 1;
+}
+
+static int setTextBaseline(duk_context* ctx)
+{
+	auto state = dcanvas::dukUtils::fromCtx<CanvasRenderingContext2D>(ctx);
+
+	std::string textBaseline(duk_require_string(ctx, -1));
+	state->setTextBaseline(textBaseline);
+	return 0;
 }
 
 static void pushCanvasRenderingContext(duk_context * ctx, CanvasRenderingContext2D * canvas)
@@ -169,6 +232,9 @@ static void pushCanvasRenderingContext(duk_context * ctx, CanvasRenderingContext
 
     defineMethod(ctx, "fillRect", fillRect, 4);
     defineMethod(ctx, "fillText", fillText, 3);
+    defineMethod(ctx, "measureText", measureText, 1);
+    defineProp(ctx, "textAlign", getTextAlign, setTextAlign);
+    defineProp(ctx, "textBaseline", getTextBaseline, setTextBaseline);
     defineMethod(ctx, "drawImage", dcanvas::drawImage, DUK_VARARGS);
 
     defineProp(ctx, "canvas", getCanvas);
@@ -193,8 +259,8 @@ static int offscreenCanvasConstructor(duk_context * ctx)
                         "\xFF"
                         "internalPtr");
 
-    defineProp(ctx, "width", getWidth);
-    defineProp(ctx, "height", getHeight);
+    defineProp(ctx, "width", getWidth, setWidth);
+    defineProp(ctx, "height", getHeight, setHeight);
     defineMethod(ctx, "getContext", getContext, 1);
 
     return 1;
