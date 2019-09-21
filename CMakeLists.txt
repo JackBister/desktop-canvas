@@ -56,6 +56,7 @@ if (UNIX)
         find_library(OGG_LIBRARY ogg)
         find_library(OUT123_LIBRARY out123)
         find_library(PNG_LIBRARY png)
+        find_library(SNDIO_LIBRARY sndio)
         find_library(VORBIS_LIBRARY vorbis)
         find_library(VORBISENC_LIBRARY vorbisenc)
         find_library(VORBISFILE_LIBRARY vorbisfile)
@@ -70,6 +71,7 @@ if (UNIX)
                 ${MODPLUG_LIBRARY}
                 ${MPG123_LIBRARY}
                 ${OUT123_LIBRARY}
+                ${SNDIO_LIBRARY}
                 ${VORBISENC_LIBRARY}
                 ${VORBISFILE_LIBRARY}
                 ${VORBIS_LIBRARY}
