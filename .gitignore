@@ -4,7 +4,6 @@
 .project
 .settings
 .vs
-.vscode
 
 *.dll
 *.exe
