@@ -48,7 +48,7 @@ static int drawImage5args(duk_context * ctx)
     int dWidth = duk_require_number(ctx, -2);
     int dHeight = duk_require_number(ctx, -1);
 
-    duk_get_prop_string(ctx, -3,
+    duk_get_prop_string(ctx, -5,
                         "\xFF"
                         "\xFF"
                         "internalClassName");
@@ -86,7 +86,7 @@ static int drawImage9args(duk_context * ctx)
     int dWidth = duk_require_number(ctx, -2);
     int dHeight = duk_require_number(ctx, -1);
 
-    duk_get_prop_string(ctx, -3,
+    duk_get_prop_string(ctx, -9,
                         "\xFF"
                         "\xFF"
                         "internalClassName");

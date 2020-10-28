@@ -51,6 +51,12 @@ static int loadBitmap(duk_context * ctx)
                         "\xFF"
                         "internalPtr");
 
+    duk_push_string(ctx, "ImageBitmap");
+    duk_put_prop_string(ctx, -2,
+                        "\xFF"
+                        "\xFF"
+                        "internalClassName");
+
     duk_push_string(ctx, "height");
     duk_push_number(ctx, bitmap->getHeight());
     duk_def_prop(ctx, -3,
@@ -70,7 +76,12 @@ static int loadBitmap(duk_context * ctx)
     duk_set_finalizer(ctx, -2);
 
     // Call the callback the user passed in with our newly constructed object as the argument
-    duk_pcall(ctx, 1);
+    auto res = duk_pcall(ctx, 1);
+
+    if (res != DUK_EXEC_SUCCESS) {
+        duk_get_prop_string(ctx, -1, "stack");
+        logger->info("error: %s", duk_safe_to_string(ctx, -1));
+    }
 
     duk_pop(ctx);
 

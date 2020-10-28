@@ -11,16 +11,12 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 
-/*
-#ifdef CANVAS_DUK_DEBUG
 #define DUK_USE_DEBUG
 #define DUK_USE_DEBUG_LEVEL 0
-#define DUK_USE_DEBUG_WRITE(level,file,line,func,msg) do { \
-        fprintf(stderr, "D%ld %s:%d (%s): %s\n", \
-                (long) (level), (file), (long) (line), (func), (msg)); \
-        } while (0)
-#endif
-*/
+#define DUK_USE_DEBUG_WRITE(level, file, line, func, msg)                                          \
+    do {                                                                                           \
+        logger->info("D%ld %s:%d (%s): %s", (long)(level), (file), (long)(line), (func), (msg));   \
+    } while (0)
 
 #include "Canvas/SDLCanvasRenderingContext2D.h"
 #include "Canvas/SDLWindowCanvas.h"
